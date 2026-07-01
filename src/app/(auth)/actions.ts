@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/ratelimit";
 
@@ -63,4 +64,33 @@ export async function signOut() {
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/login");
+}
+
+// Sends a password-reset email to the signed-in user. The link in the email
+// returns them to the app to set a new password.
+export async function resetPassword() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    return { error: "You must be signed in to reset your password." };
+  }
+
+  const { ok } = await rateLimit("reset");
+  if (!ok) {
+    return { error: "Too many attempts. Please wait a minute and try again." };
+  }
+
+  const origin = headers().get("origin") ?? "";
+  const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+    redirectTo: origin ? `${origin}/login` : undefined,
+  });
+
+  if (error) return { error: error.message };
+
+  return {
+    message: `We sent a password reset link to ${user.email}. Check your inbox.`,
+  };
 }
