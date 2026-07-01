@@ -73,6 +73,16 @@ export function monthRange(key: string): { start: string; end: string } {
   return { start, end };
 }
 
+// Formats a YYYY-MM-DD date string as e.g. "Jun 12" without timezone drift.
+export function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  if (!y || !m || !d) return dateStr;
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export function shiftMonth(key: string, delta: number): string {
   const [y, m] = key.split("-").map(Number);
   const d = new Date(y, m - 1 + delta, 1);

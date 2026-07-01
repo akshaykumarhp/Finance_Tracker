@@ -26,38 +26,58 @@ function useActive() {
   return (href: string) => pathname === href || pathname.startsWith(href + "/");
 }
 
-// Left rail on tablet/desktop.
+function Logo() {
+  return (
+    <div className="flex items-center gap-2.5 px-2 py-1">
+      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
+        <Wallet className="h-5 w-5" />
+      </span>
+      <div className="leading-tight">
+        <div className="text-sm font-bold text-ink-900">House Tracker</div>
+        <div className="text-[11px] text-ink-400">Household finances</div>
+      </div>
+    </div>
+  );
+}
+
 export function DesktopSidebar() {
   const isActive = useActive();
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col gap-1 border-r border-slate-200 bg-white p-3 md:flex md:h-screen md:sticky md:top-0">
-      <div className="mb-3 flex items-center gap-2 px-2 py-2 text-brand-700">
-        <Wallet className="h-6 w-6" />
-        <span className="font-bold">House Tracker</span>
+    <aside className="hidden w-64 shrink-0 flex-col gap-1 border-r border-ink-200/70 bg-white/70 p-3 backdrop-blur md:sticky md:top-0 md:flex md:h-screen">
+      <div className="mb-4 mt-1">
+        <Logo />
       </div>
 
       <nav className="flex flex-1 flex-col gap-1">
-        {links.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={clsx(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
-              isActive(href)
-                ? "bg-brand-50 text-brand-700"
-                : "text-slate-600 hover:bg-slate-50",
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
-        ))}
+        {links.map(({ href, label, icon: Icon }) => {
+          const active = isActive(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={clsx(
+                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                active
+                  ? "bg-brand-50 text-brand-700 shadow-sm shadow-brand-600/5"
+                  : "text-ink-500 hover:bg-ink-50 hover:text-ink-800",
+              )}
+            >
+              <Icon
+                className={clsx(
+                  "h-[18px] w-[18px] transition",
+                  active ? "text-brand-600" : "text-ink-400 group-hover:text-ink-600",
+                )}
+              />
+              {label}
+            </Link>
+          );
+        })}
       </nav>
 
-      <form action={signOut} className="mt-1">
-        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-slate-50 hover:text-red-600">
-          <LogOut className="h-4 w-4" />
+      <form action={signOut} className="mt-1 border-t border-ink-100 pt-2">
+        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-400 transition hover:bg-rose-50 hover:text-rose-600">
+          <LogOut className="h-[18px] w-[18px]" />
           Sign out
         </button>
       </form>
@@ -65,25 +85,30 @@ export function DesktopSidebar() {
   );
 }
 
-// Fixed bottom tab bar on phones.
 export function MobileNav() {
   const isActive = useActive();
 
   return (
-    <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 flex border-t border-slate-200 bg-white/95 backdrop-blur md:hidden">
-      {links.map(({ href, short, icon: Icon }) => (
-        <Link
-          key={href}
-          href={href}
-          className={clsx(
-            "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-medium transition",
-            isActive(href) ? "text-brand-600" : "text-slate-400",
-          )}
-        >
-          <Icon className="h-5 w-5" />
-          {short}
-        </Link>
-      ))}
+    <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 flex border-t border-ink-200/70 bg-white/90 shadow-[0_-4px_20px_-8px_rgba(15,23,42,0.15)] backdrop-blur md:hidden">
+      {links.map(({ href, short, icon: Icon }) => {
+        const active = isActive(href);
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={clsx(
+              "relative flex flex-1 flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition",
+              active ? "text-brand-600" : "text-ink-400",
+            )}
+          >
+            {active && (
+              <span className="absolute top-0 h-0.5 w-8 rounded-full bg-brand-600" />
+            )}
+            <Icon className="h-5 w-5" />
+            {short}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

@@ -10,8 +10,8 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-lg font-semibold text-slate-800">Welcome back</h1>
-      <p className="mb-5 text-sm text-slate-500">
+      <h1 className="mb-1 text-lg font-semibold text-ink-900">Welcome back</h1>
+      <p className="mb-5 text-sm text-ink-400">
         Sign in to your household dashboard.
       </p>
 
@@ -36,7 +36,7 @@ export default function LoginPage() {
         </div>
 
         {state?.error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
             {state.error}
           </p>
         )}
@@ -44,7 +44,7 @@ export default function LoginPage() {
         <SubmitButton>Sign in</SubmitButton>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
+      <p className="mt-4 text-center text-sm text-ink-400">
         No account?{" "}
         <Link href="/signup" className="font-medium text-brand-600 hover:underline">
           Create one

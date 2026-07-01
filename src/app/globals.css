@@ -7,51 +7,77 @@
 }
 
 html {
-  /* Stop iOS Safari from auto-inflating text in landscape. */
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  @apply bg-slate-50 text-slate-800 antialiased;
-  /* Remove the grey tap flash on iOS/Android Chrome. */
+  @apply bg-ink-100 font-sans text-ink-800 antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Soft, professional backdrop: faint indigo glow up top over cool grey. */
+  background-color: #f4f6fb;
+  background-image:
+    radial-gradient(60rem 40rem at 15% -10%, rgba(99, 102, 241, 0.08), transparent 60%),
+    radial-gradient(50rem 40rem at 110% 0%, rgba(139, 92, 246, 0.06), transparent 55%);
+  background-attachment: fixed;
 }
 
-/* Respect the iPhone notch / home-indicator safe areas. */
+/* iPhone notch / home-indicator safe areas. */
 .safe-top {
-  padding-top: env(safe-area-inset-top);
+  padding-top: max(env(safe-area-inset-top), 0.75rem);
 }
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Aligned, consistent-width figures for money. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
 @layer components {
   .card {
-    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5;
+    @apply rounded-2xl border border-ink-200/70 bg-white p-4 shadow-card sm:p-5;
+  }
+  .card-interactive {
+    @apply card transition duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
   }
 
   .btn {
-    @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
   }
-
   .btn-primary {
-    @apply btn bg-brand-600 text-white hover:bg-brand-700;
+    @apply btn bg-brand-600 text-white shadow-soft shadow-brand-600/20 hover:bg-brand-700;
   }
-
   .btn-ghost {
-    @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50;
+    @apply btn border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50;
   }
-
   .btn-danger {
-    @apply btn border border-red-200 bg-white text-red-600 hover:bg-red-50;
+    @apply btn border border-rose-200 bg-white text-rose-600 hover:bg-rose-50;
+  }
+  .btn-sm {
+    @apply rounded-lg px-3 py-1.5 text-xs;
   }
 
   .input {
-    /* text-base (16px) on mobile prevents iOS Safari from zooming on focus. */
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base outline-none placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 sm:text-sm;
+    /* 16px on mobile prevents iOS Safari zoom-on-focus. */
+    @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-800 shadow-sm outline-none transition placeholder:text-ink-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 sm:text-sm;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-600;
   }
 
-  .label {
-    @apply mb-1 block text-sm font-medium text-slate-600;
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-md bg-ink-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-500;
+  }
+
+  .page-title {
+    @apply text-xl font-bold tracking-tight text-ink-900 sm:text-2xl;
+  }
+  .section-title {
+    @apply text-sm font-semibold text-ink-800;
   }
 }

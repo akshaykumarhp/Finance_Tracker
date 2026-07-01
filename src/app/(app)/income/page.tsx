@@ -1,7 +1,7 @@
-import { Trash2 } from "lucide-react";
+import { Trash2, ArrowDownRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import { formatMoney, monthKey, monthRange } from "@/lib/format";
+import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
 import type { Income } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddIncomeForm from "@/components/AddIncomeForm";
@@ -33,47 +33,56 @@ export default async function IncomePage({
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <h1 className="text-xl font-bold text-slate-800">Income</h1>
+        <div>
+          <h1 className="page-title">Income</h1>
+          <p className="mt-0.5 text-sm text-ink-400">Money coming in this month.</p>
+        </div>
         <MonthNav month={month} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:max-w-md">
+      <div className="grid grid-cols-2 gap-3 sm:max-w-md sm:gap-4">
         <StatCard
           label="Total this month"
           value={formatMoney(total, house.currency)}
           tone="positive"
+          icon={<ArrowDownRight className="h-4 w-4" />}
         />
         <StatCard label="Entries" value={String(incomes.length)} />
       </div>
 
       <div className="card">
-        <h2 className="mb-4 font-semibold text-slate-800">Add income</h2>
+        <h2 className="section-title mb-4">Add income</h2>
         <AddIncomeForm houseId={house.id} currency={house.currency} />
       </div>
 
       <div className="card">
-        <h2 className="mb-3 font-semibold text-slate-800">This month</h2>
+        <h2 className="section-title mb-3">This month</h2>
         {incomes.length === 0 ? (
-          <p className="text-sm text-slate-400">No income recorded this month.</p>
+          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center text-sm text-ink-500">
+            No income recorded this month.
+          </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-ink-100">
             {incomes.map((i) => (
-              <div key={i.id} className="flex items-center justify-between py-3">
-                <div className="min-w-0">
-                  <p className="truncate font-medium text-slate-700">{i.source}</p>
-                  <p className="text-xs text-slate-400">
-                    {i.received_on}
+              <div key={i.id} className="flex items-center gap-3 py-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                  <ArrowDownRight className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-ink-800">{i.source}</p>
+                  <p className="text-xs text-ink-400">
+                    {formatDate(i.received_on)}
                     {i.note ? ` · ${i.note}` : ""}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="font-semibold text-emerald-600">
-                    {formatMoney(i.amount, house.currency)}
+                <div className="flex items-center gap-2">
+                  <span className="tnum font-semibold text-emerald-600">
+                    +{formatMoney(i.amount, house.currency)}
                   </span>
                   <form action={deleteIncome}>
                     <input type="hidden" name="id" value={i.id} />
                     <button
-                      className="rounded-lg p-2 text-slate-300 hover:bg-red-50 hover:text-red-500"
+                      className="rounded-lg p-2 text-ink-300 transition hover:bg-rose-50 hover:text-rose-500"
                       aria-label="Delete income"
                     >
                       <Trash2 className="h-4 w-4" />

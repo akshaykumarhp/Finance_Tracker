@@ -15,18 +15,22 @@ export default function Onboarding() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-slate-50 to-slate-100 px-4 py-10">
       <div className="w-full max-w-4xl">
         <div className="mb-8 text-center">
-          <div className="mb-2 flex items-center justify-center gap-2 text-brand-700">
-            <Wallet className="h-7 w-7" />
-            <span className="text-xl font-bold">House Expense Tracker</span>
+          <div className="mb-3 flex items-center justify-center gap-2.5">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
+              <Wallet className="h-5 w-5" />
+            </span>
+            <span className="text-xl font-bold tracking-tight text-ink-900">
+              House Expense Tracker
+            </span>
           </div>
-          <p className="text-slate-500">
+          <p className="text-ink-500">
             Create a household to start, or join one a family member already made.
           </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="card">
-            <div className="mb-3 flex items-center gap-2 font-semibold text-slate-800">
+            <div className="mb-3 flex items-center gap-2 section-title">
               <Home className="h-5 w-5 text-brand-600" />
               Create a house
             </div>
@@ -57,7 +61,7 @@ export default function Onboarding() {
           </div>
 
           <div className="card">
-            <div className="mb-3 flex items-center gap-2 font-semibold text-slate-800">
+            <div className="mb-3 flex items-center gap-2 section-title">
               <Users className="h-5 w-5 text-brand-600" />
               Join a house
             </div>
@@ -83,7 +87,7 @@ export default function Onboarding() {
         </div>
 
         <form action={signOut} className="mt-6 text-center">
-          <button className="text-sm text-slate-400 hover:text-slate-600">
+          <button className="text-sm text-ink-400 hover:text-slate-600">
             Sign out
           </button>
         </form>

@@ -22,35 +22,35 @@ export default function BudgetBar({
 
   return (
     <div>
-      <div className="mb-1 flex items-center justify-between text-sm">
-        <span className="flex items-center gap-2 font-medium text-slate-700">
+      <div className="mb-1.5 flex items-center justify-between text-sm">
+        <span className="flex items-center gap-2 font-medium text-ink-800">
           <span
-            className="inline-block h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: color }}
+            className="inline-block h-2.5 w-2.5 rounded-full ring-2 ring-white"
+            style={{ backgroundColor: color, boxShadow: `0 0 0 1px ${color}33` }}
           />
           {name}
-          <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-slate-400">
-            {kind}
-          </span>
+          <span className="chip">{kind}</span>
         </span>
-        <span className="text-slate-500">
-          {formatMoney(spent, currency)}
+        <span className="tnum text-ink-500">
+          <span className="font-semibold text-ink-800">
+            {formatMoney(spent, currency)}
+          </span>
           {budget > 0 && (
-            <span className="text-slate-400"> / {formatMoney(budget, currency)}</span>
+            <span className="text-ink-400"> / {formatMoney(budget, currency)}</span>
           )}
         </span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+      <div className="h-2.5 w-full overflow-hidden rounded-full bg-ink-100">
         <div
-          className={clsx("h-full rounded-full transition-all", over && "!bg-red-500")}
+          className={clsx("h-full rounded-full transition-all", over && "!bg-rose-500")}
           style={{ width: `${pct}%`, backgroundColor: over ? undefined : color }}
         />
       </div>
       {budget > 0 && (
         <p
           className={clsx(
-            "mt-1 text-xs",
-            over ? "text-red-500" : "text-slate-400",
+            "mt-1.5 text-xs font-medium",
+            over ? "text-rose-500" : "text-ink-400",
           )}
         >
           {over

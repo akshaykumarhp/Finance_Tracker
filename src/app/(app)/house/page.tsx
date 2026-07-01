@@ -1,4 +1,4 @@
-import { Crown, LogOut, User as UserIcon } from "lucide-react";
+import { Crown, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import type { HouseMember, Profile } from "@/lib/types";
@@ -32,11 +32,16 @@ export default async function HousePage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold text-slate-800">House &amp; Members</h1>
+      <div>
+        <h1 className="page-title">House &amp; Members</h1>
+        <p className="mt-0.5 text-sm text-ink-400">
+          Manage your household, currency, and who can collaborate.
+        </p>
+      </div>
 
       <div className="card space-y-4">
         <div>
-          <h2 className="font-semibold text-slate-800">House name</h2>
+          <h2 className="section-title">House name</h2>
           <form action={renameHouse} className="mt-2 flex gap-2">
             <input type="hidden" name="house_id" value={house.id} />
             <input name="name" defaultValue={house.name} className="input max-w-sm" />
@@ -44,9 +49,9 @@ export default async function HousePage() {
           </form>
         </div>
 
-        <div className="border-t border-slate-100 pt-4">
-          <h2 className="font-semibold text-slate-800">Currency</h2>
-          <p className="mb-2 text-sm text-slate-500">
+        <div className="border-t border-ink-100 pt-4">
+          <h2 className="section-title">Currency</h2>
+          <p className="mb-2 text-sm text-ink-500">
             Applies to all amounts and dashboards for this house.
           </p>
           <form action={updateHouseCurrency} className="flex flex-col gap-2 sm:flex-row">
@@ -58,14 +63,14 @@ export default async function HousePage() {
           </form>
         </div>
 
-        <div className="border-t border-slate-100 pt-4">
-          <h2 className="font-semibold text-slate-800">Invite people</h2>
-          <p className="mb-3 text-sm text-slate-500">
+        <div className="border-t border-ink-100 pt-4">
+          <h2 className="section-title">Invite people</h2>
+          <p className="mb-3 text-sm text-ink-500">
             Share this code. Anyone who signs up and enters it joins this house and
             can view and add income and expenses.
           </p>
           <div className="flex items-center gap-3">
-            <span className="rounded-lg bg-slate-100 px-4 py-2 font-mono text-lg font-bold tracking-widest text-slate-800">
+            <span className="rounded-xl border border-brand-100 bg-brand-50 px-4 py-2 font-mono text-lg font-bold tracking-[0.3em] text-brand-700">
               {house.join_code}
             </span>
             <CopyButton value={house.join_code} />
@@ -74,25 +79,25 @@ export default async function HousePage() {
       </div>
 
       <div className="card">
-        <h2 className="mb-3 font-semibold text-slate-800">
+        <h2 className="mb-3 section-title">
           Members ({members.length})
         </h2>
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-ink-100">
           {members.map((m) => {
             const p = profileOf(m.user_id);
             const isYou = m.user_id === user?.id;
             return (
               <div key={m.user_id} className="flex items-center justify-between py-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-50 text-brand-600">
-                    <UserIcon className="h-4 w-4" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-violet-600 text-sm font-bold uppercase text-white">
+                    {(p?.display_name || p?.email || "M").charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="text-sm font-medium text-ink-800">
                       {p?.display_name || p?.email || "Member"}
-                      {isYou && <span className="text-slate-400"> (you)</span>}
+                      {isYou && <span className="text-ink-400"> (you)</span>}
                     </p>
-                    <p className="text-xs text-slate-400">{p?.email}</p>
+                    <p className="text-xs text-ink-400">{p?.email}</p>
                   </div>
                 </div>
                 {m.role === "owner" && (
@@ -112,8 +117,8 @@ export default async function HousePage() {
 
       <div className="card flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-semibold text-slate-800">Leave this house</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="section-title">Leave this house</h2>
+          <p className="text-sm text-ink-500">
             You&apos;ll lose access to its data unless you rejoin with the code.
           </p>
         </div>
