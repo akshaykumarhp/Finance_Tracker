@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Plus, Users } from "lucide-react";
 import { createHouse, joinHouse } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
+import CurrencySelect from "@/components/CurrencySelect";
 
 // Create-another / join-another house controls, shown collapsed by default.
 export default function HouseActions() {
@@ -29,6 +30,7 @@ export default function HouseActions() {
         </div>
         <form action={createAction} className="space-y-2">
           <input name="name" className="input" placeholder="House name" required />
+          <CurrencySelect />
           {createState?.error && (
             <p className="text-sm text-red-600">{createState.error}</p>
           )}

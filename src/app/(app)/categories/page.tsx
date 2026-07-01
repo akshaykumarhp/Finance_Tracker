@@ -2,7 +2,7 @@ import { Trash2, Save } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import type { Category } from "@/lib/types";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, currencySymbol } from "@/lib/format";
 import AddCategoryForm from "@/components/AddCategoryForm";
 import { updateCategory, deleteCategory } from "@/app/(app)/actions";
 
@@ -31,7 +31,7 @@ export default async function CategoriesPage() {
 
       <div className="card">
         <h2 className="mb-4 font-semibold text-slate-800">Add a section</h2>
-        <AddCategoryForm houseId={house.id} />
+        <AddCategoryForm houseId={house.id} currency={house.currency} />
       </div>
 
       <div className="card">
@@ -64,7 +64,9 @@ export default async function CategoriesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="label">Budget ($)</label>
+                    <label className="label">
+                      Budget ({currencySymbol(house.currency)})
+                    </label>
                     <input
                       name="monthly_budget"
                       type="number"
@@ -89,7 +91,7 @@ export default async function CategoriesPage() {
                       Save changes
                     </button>
                     <span className="ml-3 text-xs text-slate-400">
-                      Budget: {formatMoney(c.monthly_budget)} / month
+                      Budget: {formatMoney(c.monthly_budget, house.currency)} / month
                     </span>
                   </div>
                 </form>

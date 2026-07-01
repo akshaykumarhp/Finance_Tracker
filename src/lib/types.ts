@@ -4,6 +4,7 @@ export interface House {
   id: string;
   name: string;
   join_code: string;
+  currency: string;
   created_by: string;
   created_at: string;
 }

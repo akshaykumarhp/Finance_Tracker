@@ -6,13 +6,16 @@ import { Plus } from "lucide-react";
 import { addExpense } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
 import type { Category } from "@/lib/types";
+import { currencySymbol } from "@/lib/format";
 
 export default function AddExpenseForm({
   houseId,
   categories,
+  currency,
 }: {
   houseId: string;
   categories: Category[];
+  currency: string;
 }) {
   const [state, action] = useFormState(addExpense, {} as { error?: string; ok?: boolean });
   const ref = useRef<HTMLFormElement>(null);
@@ -37,7 +40,7 @@ export default function AddExpenseForm({
         </select>
       </div>
       <div>
-        <label className="label">Amount ($)</label>
+        <label className="label">Amount ({currencySymbol(currency)})</label>
         <input
           name="amount"
           type="number"

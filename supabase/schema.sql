@@ -26,6 +26,7 @@ create table if not exists public.houses (
   id         uuid primary key default gen_random_uuid(),
   name       text not null,
   join_code  text not null unique,
+  currency   text not null default 'USD',
   created_by uuid not null references auth.users (id) on delete cascade,
   created_at timestamptz not null default now()
 );
@@ -114,7 +115,7 @@ as $$
 $$;
 
 -- Create a house and make the caller its owner, atomically.
-create or replace function public.create_house(p_name text)
+create or replace function public.create_house(p_name text, p_currency text default 'USD')
 returns public.houses
 language plpgsql
 security definer
@@ -134,8 +135,13 @@ begin
     exit when not exists (select 1 from public.houses where join_code = v_code);
   end loop;
 
-  insert into public.houses (name, join_code, created_by)
-  values (coalesce(nullif(trim(p_name), ''), 'My House'), v_code, auth.uid())
+  insert into public.houses (name, join_code, created_by, currency)
+  values (
+    coalesce(nullif(trim(p_name), ''), 'My House'),
+    v_code,
+    auth.uid(),
+    coalesce(nullif(trim(p_currency), ''), 'USD')
+  )
   returning * into v_house;
 
   insert into public.house_members (house_id, user_id, role)
@@ -257,7 +263,7 @@ create policy expenses_all on public.expenses
 -- ---------------------------------------------------------------------------
 --  Grants (RPCs must be callable by authenticated users)
 -- ---------------------------------------------------------------------------
-grant execute on function public.create_house(text)      to authenticated;
+grant execute on function public.create_house(text, text) to authenticated;
 grant execute on function public.join_house(text)        to authenticated;
 grant execute on function public.is_house_member(uuid)   to authenticated;
 grant execute on function public.shares_house_with(uuid) to authenticated;

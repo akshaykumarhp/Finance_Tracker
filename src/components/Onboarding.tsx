@@ -4,6 +4,7 @@ import { useFormState } from "react-dom";
 import { Home, Users, Wallet } from "lucide-react";
 import { createHouse, joinHouse } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
+import CurrencySelect from "@/components/CurrencySelect";
 import { signOut } from "@/app/(auth)/actions";
 
 export default function Onboarding() {
@@ -41,6 +42,12 @@ export default function Onboarding() {
                   placeholder="e.g. The Kumar Household"
                   required
                 />
+              </div>
+              <div>
+                <label className="label" htmlFor="currency">
+                  Currency
+                </label>
+                <CurrencySelect id="currency" />
               </div>
               {createState?.error && (
                 <p className="text-sm text-red-600">{createState.error}</p>

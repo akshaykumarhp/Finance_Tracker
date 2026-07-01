@@ -23,8 +23,12 @@ function refresh() {
 
 export async function createHouse(_prev: unknown, formData: FormData) {
   const name = str(formData.get("name")) || "My House";
+  const currency = str(formData.get("currency")) || "USD";
   const supabase = createClient();
-  const { data, error } = await supabase.rpc("create_house", { p_name: name });
+  const { data, error } = await supabase.rpc("create_house", {
+    p_name: name,
+    p_currency: currency,
+  });
   if (error) return { error: error.message };
   if (data?.id) {
     cookies().set(ACTIVE_HOUSE_COOKIE, data.id, { path: "/", maxAge: 60 * 60 * 24 * 365 });
@@ -57,6 +61,15 @@ export async function renameHouse(formData: FormData) {
   if (!id || !name) return;
   const supabase = createClient();
   await supabase.from("houses").update({ name }).eq("id", id);
+  refresh();
+}
+
+export async function updateHouseCurrency(formData: FormData) {
+  const id = str(formData.get("house_id"));
+  const currency = str(formData.get("currency"));
+  if (!id || !currency) return;
+  const supabase = createClient();
+  await supabase.from("houses").update({ currency }).eq("id", id);
   refresh();
 }
 

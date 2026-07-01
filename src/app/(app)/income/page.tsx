@@ -38,13 +38,17 @@ export default async function IncomePage({
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:max-w-md">
-        <StatCard label="Total this month" value={formatMoney(total)} tone="positive" />
+        <StatCard
+          label="Total this month"
+          value={formatMoney(total, house.currency)}
+          tone="positive"
+        />
         <StatCard label="Entries" value={String(incomes.length)} />
       </div>
 
       <div className="card">
         <h2 className="mb-4 font-semibold text-slate-800">Add income</h2>
-        <AddIncomeForm houseId={house.id} />
+        <AddIncomeForm houseId={house.id} currency={house.currency} />
       </div>
 
       <div className="card">
@@ -64,7 +68,7 @@ export default async function IncomePage({
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-semibold text-emerald-600">
-                    {formatMoney(i.amount)}
+                    {formatMoney(i.amount, house.currency)}
                   </span>
                   <form action={deleteIncome}>
                     <input type="hidden" name="id" value={i.id} />

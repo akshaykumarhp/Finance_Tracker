@@ -7,12 +7,14 @@ export default function BudgetBar({
   spent,
   budget,
   kind,
+  currency,
 }: {
   name: string;
   color: string;
   spent: number;
   budget: number;
   kind: "commitment" | "spending";
+  currency: string;
 }) {
   const pct = budget > 0 ? Math.min((spent / budget) * 100, 100) : spent > 0 ? 100 : 0;
   const over = budget > 0 && spent > budget;
@@ -32,9 +34,9 @@ export default function BudgetBar({
           </span>
         </span>
         <span className="text-slate-500">
-          {formatMoney(spent)}
+          {formatMoney(spent, currency)}
           {budget > 0 && (
-            <span className="text-slate-400"> / {formatMoney(budget)}</span>
+            <span className="text-slate-400"> / {formatMoney(budget, currency)}</span>
           )}
         </span>
       </div>
@@ -52,8 +54,8 @@ export default function BudgetBar({
           )}
         >
           {over
-            ? `Over budget by ${formatMoney(Math.abs(remaining))}`
-            : `${formatMoney(remaining)} left`}
+            ? `Over budget by ${formatMoney(Math.abs(remaining), currency)}`
+            : `${formatMoney(remaining, currency)} left`}
         </p>
       )}
     </div>

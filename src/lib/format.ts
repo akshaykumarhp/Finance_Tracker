@@ -1,12 +1,54 @@
-const currency = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 2,
-});
+export interface CurrencyDef {
+  code: string;
+  name: string;
+  symbol: string;
+}
 
-export function formatMoney(value: number | string | null | undefined): string {
+// Currencies offered in the picker. `symbol` is used for compact labels;
+// full formatting is delegated to Intl for correct grouping/decimals.
+export const CURRENCIES: CurrencyDef[] = [
+  { code: "USD", name: "US Dollar", symbol: "$" },
+  { code: "EUR", name: "Euro", symbol: "€" },
+  { code: "GBP", name: "British Pound", symbol: "£" },
+  { code: "INR", name: "Indian Rupee", symbol: "₹" },
+  { code: "JPY", name: "Japanese Yen", symbol: "¥" },
+  { code: "CNY", name: "Chinese Yuan", symbol: "¥" },
+  { code: "CAD", name: "Canadian Dollar", symbol: "$" },
+  { code: "AUD", name: "Australian Dollar", symbol: "$" },
+  { code: "SGD", name: "Singapore Dollar", symbol: "$" },
+  { code: "AED", name: "UAE Dirham", symbol: "د.إ" },
+  { code: "CHF", name: "Swiss Franc", symbol: "Fr" },
+];
+
+export const DEFAULT_CURRENCY = "USD";
+
+const formatters = new Map<string, Intl.NumberFormat>();
+
+function formatterFor(code: string): Intl.NumberFormat {
+  let f = formatters.get(code);
+  if (!f) {
+    try {
+      f = new Intl.NumberFormat("en-US", { style: "currency", currency: code });
+    } catch {
+      f = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    }
+    formatters.set(code, f);
+  }
+  return f;
+}
+
+export function currencySymbol(code = DEFAULT_CURRENCY): string {
+  return CURRENCIES.find((c) => c.code === code)?.symbol ?? "$";
+}
+
+export function formatMoney(
+  value: number | string | null | undefined,
+  currency = DEFAULT_CURRENCY,
+): string {
   const n = typeof value === "string" ? parseFloat(value) : value ?? 0;
-  return currency.format(Number.isFinite(n as number) ? (n as number) : 0);
+  return formatterFor(currency).format(
+    Number.isFinite(n as number) ? (n as number) : 0,
+  );
 }
 
 // A month key like "2026-06".

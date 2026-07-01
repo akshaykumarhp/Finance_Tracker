@@ -47,7 +47,11 @@ export default async function TransactionsPage({
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:max-w-md">
-        <StatCard label="Total this month" value={formatMoney(total)} tone="negative" />
+        <StatCard
+          label="Total this month"
+          value={formatMoney(total, house.currency)}
+          tone="negative"
+        />
         <StatCard label="Entries" value={String(expenses.length)} />
       </div>
 
@@ -59,7 +63,11 @@ export default async function TransactionsPage({
             budgets. You can still log uncategorized expenses below.
           </p>
         )}
-        <AddExpenseForm houseId={house.id} categories={categories} />
+        <AddExpenseForm
+          houseId={house.id}
+          categories={categories}
+          currency={house.currency}
+        />
       </div>
 
       <div className="card">
@@ -86,7 +94,7 @@ export default async function TransactionsPage({
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-semibold text-slate-800">
-                    {formatMoney(e.amount)}
+                    {formatMoney(e.amount, house.currency)}
                   </span>
                   <form action={deleteExpense}>
                     <input type="hidden" name="id" value={e.id} />

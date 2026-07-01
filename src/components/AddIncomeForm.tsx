@@ -5,8 +5,15 @@ import { useFormState } from "react-dom";
 import { Plus } from "lucide-react";
 import { addIncome } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
+import { currencySymbol } from "@/lib/format";
 
-export default function AddIncomeForm({ houseId }: { houseId: string }) {
+export default function AddIncomeForm({
+  houseId,
+  currency,
+}: {
+  houseId: string;
+  currency: string;
+}) {
   const [state, action] = useFormState(addIncome, {} as { error?: string; ok?: boolean });
   const ref = useRef<HTMLFormElement>(null);
   const today = new Date().toISOString().slice(0, 10);
@@ -23,7 +30,7 @@ export default function AddIncomeForm({ houseId }: { houseId: string }) {
         <input name="source" className="input" placeholder="Salary" required />
       </div>
       <div>
-        <label className="label">Amount ($)</label>
+        <label className="label">Amount ({currencySymbol(currency)})</label>
         <input
           name="amount"
           type="number"

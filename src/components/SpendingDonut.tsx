@@ -9,7 +9,13 @@ export interface Slice {
   color: string;
 }
 
-export default function SpendingDonut({ data }: { data: Slice[] }) {
+export default function SpendingDonut({
+  data,
+  currency,
+}: {
+  data: Slice[];
+  currency: string;
+}) {
   const total = data.reduce((s, d) => s + d.value, 0);
 
   if (total === 0) {
@@ -38,7 +44,7 @@ export default function SpendingDonut({ data }: { data: Slice[] }) {
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number) => formatMoney(value)}
+            formatter={(value: number) => formatMoney(value, currency)}
             contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0" }}
           />
         </PieChart>
@@ -46,7 +52,7 @@ export default function SpendingDonut({ data }: { data: Slice[] }) {
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-xs text-slate-400">Total spent</span>
         <span className="text-lg font-bold text-slate-800">
-          {formatMoney(total)}
+          {formatMoney(total, currency)}
         </span>
       </div>
     </div>

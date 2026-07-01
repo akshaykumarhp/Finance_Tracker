@@ -4,7 +4,8 @@ import { getActiveHouse } from "@/lib/house";
 import type { HouseMember, Profile } from "@/lib/types";
 import CopyButton from "@/components/CopyButton";
 import HouseActions from "@/components/HouseActions";
-import { renameHouse, leaveHouse } from "@/app/(app)/actions";
+import CurrencySelect from "@/components/CurrencySelect";
+import { renameHouse, leaveHouse, updateHouseCurrency } from "@/app/(app)/actions";
 
 export default async function HousePage() {
   const { house } = await getActiveHouse();
@@ -39,6 +40,20 @@ export default async function HousePage() {
           <form action={renameHouse} className="mt-2 flex gap-2">
             <input type="hidden" name="house_id" value={house.id} />
             <input name="name" defaultValue={house.name} className="input max-w-sm" />
+            <button className="btn-primary">Save</button>
+          </form>
+        </div>
+
+        <div className="border-t border-slate-100 pt-4">
+          <h2 className="font-semibold text-slate-800">Currency</h2>
+          <p className="mb-2 text-sm text-slate-500">
+            Applies to all amounts and dashboards for this house.
+          </p>
+          <form action={updateHouseCurrency} className="flex flex-col gap-2 sm:flex-row">
+            <input type="hidden" name="house_id" value={house.id} />
+            <div className="max-w-sm flex-1">
+              <CurrencySelect defaultValue={house.currency} />
+            </div>
             <button className="btn-primary">Save</button>
           </form>
         </div>

@@ -85,13 +85,13 @@ export default async function DashboardPage({
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
           label="Income"
-          value={formatMoney(totalIncome)}
+          value={formatMoney(totalIncome, house.currency)}
           tone="positive"
           icon={<Wallet className="h-5 w-5" />}
         />
         <StatCard
           label="Spent"
-          value={formatMoney(totalSpent)}
+          value={formatMoney(totalSpent, house.currency)}
           tone="negative"
           icon={<TrendingDown className="h-5 w-5" />}
           sub={
@@ -102,14 +102,14 @@ export default async function DashboardPage({
         />
         <StatCard
           label="Remaining"
-          value={formatMoney(remaining)}
+          value={formatMoney(remaining, house.currency)}
           tone={remaining >= 0 ? "brand" : "negative"}
           icon={<PiggyBank className="h-5 w-5" />}
           sub={remaining < 0 ? "You're over budget" : "Left to save or spend"}
         />
         <StatCard
           label="Planned commitments"
-          value={formatMoney(totalPlanned)}
+          value={formatMoney(totalPlanned, house.currency)}
           icon={<ClipboardList className="h-5 w-5" />}
           sub="Total monthly budget across sections"
         />
@@ -118,7 +118,7 @@ export default async function DashboardPage({
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="card lg:col-span-2">
           <h2 className="mb-3 font-semibold text-slate-800">Where money went</h2>
-          <SpendingDonut data={donut} />
+          <SpendingDonut data={donut} currency={house.currency} />
         </div>
 
         <div className="card lg:col-span-3">
@@ -141,6 +141,7 @@ export default async function DashboardPage({
                   kind={c.kind}
                   spent={spentByCat.get(c.id) ?? 0}
                   budget={Number(c.monthly_budget)}
+                  currency={house.currency}
                 />
               ))}
             </div>
@@ -175,7 +176,7 @@ export default async function DashboardPage({
                   </p>
                 </div>
                 <span className="text-sm font-semibold text-slate-800">
-                  {formatMoney(e.amount)}
+                  {formatMoney(e.amount, house.currency)}
                 </span>
               </div>
             ))}
