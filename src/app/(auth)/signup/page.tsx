@@ -13,7 +13,7 @@ export default function SignupPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-lg font-semibold text-ink-900">
+      <h1 className="mb-1 text-lg font-semibold text-ink-900 dark:text-white">
         Create your account
       </h1>
       <p className="mb-5 text-sm text-ink-400">
@@ -56,12 +56,12 @@ export default function SignupPage() {
         </div>
 
         {state?.error && (
-          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
+          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600 dark:bg-rose-500/10 dark:text-rose-400">
             {state.error}
           </p>
         )}
         {state?.message && (
-          <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+          <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
             {state.message}
           </p>
         )}

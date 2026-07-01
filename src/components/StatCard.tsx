@@ -1,10 +1,22 @@
 import clsx from "clsx";
 
 const tones = {
-  default: { value: "text-ink-900", chip: "bg-ink-100 text-ink-500" },
-  positive: { value: "text-emerald-600", chip: "bg-emerald-50 text-emerald-600" },
-  negative: { value: "text-rose-600", chip: "bg-rose-50 text-rose-600" },
-  brand: { value: "text-brand-600", chip: "bg-brand-50 text-brand-600" },
+  default: {
+    value: "text-ink-900 dark:text-white",
+    chip: "bg-ink-100 text-ink-500 dark:bg-ink-700 dark:text-ink-300",
+  },
+  positive: {
+    value: "text-emerald-600 dark:text-emerald-400",
+    chip: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
+  },
+  negative: {
+    value: "text-rose-600 dark:text-rose-400",
+    chip: "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400",
+  },
+  brand: {
+    value: "text-brand-600 dark:text-brand-300",
+    chip: "bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-300",
+  },
 } as const;
 
 export default function StatCard({

@@ -59,25 +59,25 @@ export default async function IncomePage({
       <div className="card">
         <h2 className="section-title mb-3">This month</h2>
         {incomes.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center text-sm text-ink-500">
+          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center text-sm text-ink-500">
             No income recorded this month.
           </div>
         ) : (
-          <div className="divide-y divide-ink-100">
+          <div className="divide-y divide-ink-100 dark:divide-ink-700">
             {incomes.map((i) => (
               <div key={i.id} className="flex items-center gap-3 py-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
                   <ArrowDownRight className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-ink-800">{i.source}</p>
+                  <p className="truncate font-medium text-ink-800 dark:text-ink-100">{i.source}</p>
                   <p className="text-xs text-ink-400">
                     {formatDate(i.received_on)}
                     {i.note ? ` · ${i.note}` : ""}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="tnum font-semibold text-emerald-600">
+                  <span className="tnum font-semibold text-emerald-600 dark:text-emerald-400">
                     +{formatMoney(i.amount, house.currency)}
                   </span>
                   <DeleteButton

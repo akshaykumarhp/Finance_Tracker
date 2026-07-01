@@ -5,6 +5,7 @@ import { Home, Users } from "lucide-react";
 import { createHouse, joinHouse } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
 import CurrencySelect from "@/components/CurrencySelect";
+import ThemeToggle from "@/components/ThemeToggle";
 import { signOut } from "@/app/(auth)/actions";
 
 export default function Onboarding() {
@@ -12,14 +13,17 @@ export default function Onboarding() {
   const [joinState, joinAction] = useFormState(joinHouse, {} as { error?: string });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-slate-50 to-slate-100 px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-ink-50 to-ink-100 px-4 py-10 dark:from-ink-900 dark:via-ink-900 dark:to-ink-900">
       <div className="w-full max-w-4xl">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
         <div className="mb-8 text-center">
           <div className="mb-3 flex items-center justify-center gap-2.5">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
               <Home className="h-5 w-5" />
             </span>
-            <span className="text-xl font-bold tracking-tight text-ink-900">
+            <span className="text-xl font-bold tracking-tight text-ink-900 dark:text-white">
               Roost
             </span>
           </div>
@@ -54,7 +58,7 @@ export default function Onboarding() {
                 <CurrencySelect id="currency" />
               </div>
               {createState?.error && (
-                <p className="text-sm text-red-600">{createState.error}</p>
+                <p className="text-sm text-red-600 dark:text-rose-400">{createState.error}</p>
               )}
               <SubmitButton>Create house</SubmitButton>
             </form>
@@ -79,7 +83,7 @@ export default function Onboarding() {
                 />
               </div>
               {joinState?.error && (
-                <p className="text-sm text-red-600">{joinState.error}</p>
+                <p className="text-sm text-red-600 dark:text-rose-400">{joinState.error}</p>
               )}
               <SubmitButton>Join house</SubmitButton>
             </form>
@@ -87,7 +91,7 @@ export default function Onboarding() {
         </div>
 
         <form action={signOut} className="mt-6 text-center">
-          <button className="text-sm text-ink-400 hover:text-slate-600">
+          <button className="text-sm text-ink-400 hover:text-ink-600 dark:hover:text-ink-200">
             Sign out
           </button>
         </form>

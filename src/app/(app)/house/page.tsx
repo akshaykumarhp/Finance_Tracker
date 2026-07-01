@@ -49,7 +49,7 @@ export default async function HousePage() {
           </form>
         </div>
 
-        <div className="border-t border-ink-100 pt-4">
+        <div className="border-t border-ink-100 pt-4 dark:border-ink-700">
           <h2 className="section-title">Currency</h2>
           <p className="mb-2 text-sm text-ink-500">
             Applies to all amounts and dashboards for this house.
@@ -63,14 +63,14 @@ export default async function HousePage() {
           </form>
         </div>
 
-        <div className="border-t border-ink-100 pt-4">
+        <div className="border-t border-ink-100 pt-4 dark:border-ink-700">
           <h2 className="section-title">Invite people</h2>
           <p className="mb-3 text-sm text-ink-500">
             Share this code. Anyone who signs up and enters it joins this house and
             can view and add income and expenses.
           </p>
           <div className="flex items-center gap-3">
-            <span className="rounded-xl border border-brand-100 bg-brand-50 px-4 py-2 font-mono text-lg font-bold tracking-[0.3em] text-brand-700">
+            <span className="rounded-xl border border-brand-100 bg-brand-50 px-4 py-2 font-mono text-lg font-bold tracking-[0.3em] text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
               {house.join_code}
             </span>
             <CopyButton value={house.join_code} />
@@ -82,7 +82,7 @@ export default async function HousePage() {
         <h2 className="mb-3 section-title">
           Members ({members.length})
         </h2>
-        <div className="divide-y divide-ink-100">
+        <div className="divide-y divide-ink-100 dark:divide-ink-700">
           {members.map((m) => {
             const p = profileOf(m.user_id);
             const isYou = m.user_id === user?.id;
@@ -93,7 +93,7 @@ export default async function HousePage() {
                     {(p?.display_name || p?.email || "M").charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-ink-800">
+                    <p className="text-sm font-medium text-ink-800 dark:text-ink-100">
                       {p?.display_name || p?.email || "Member"}
                       {isYou && <span className="text-ink-400"> (you)</span>}
                     </p>
@@ -101,7 +101,7 @@ export default async function HousePage() {
                   </div>
                 </div>
                 {m.role === "owner" && (
-                  <span className="flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600">
+                  <span className="flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
                     <Crown className="h-3.5 w-3.5" /> Owner
                   </span>
                 )}

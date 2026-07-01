@@ -40,7 +40,7 @@ export default async function CategoriesPage() {
           Your sections ({categories.length})
         </h2>
         {categories.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center text-sm text-ink-500">
+          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center text-sm text-ink-500">
             No sections yet — add your first one above.
           </div>
         ) : (
@@ -48,7 +48,7 @@ export default async function CategoriesPage() {
             {categories.map((c) => (
               <div
                 key={c.id}
-                className="flex flex-col gap-3 rounded-xl border border-ink-200/70 bg-ink-50/30 p-3 transition hover:bg-ink-50/60 sm:flex-row sm:items-end"
+                className="flex flex-col gap-3 rounded-xl border border-ink-200/70 bg-ink-50/30 p-3 transition hover:bg-ink-50/60 dark:border-ink-700/70 dark:bg-ink-800/30 dark:hover:bg-ink-800/60 sm:flex-row sm:items-end"
               >
                 <form
                   action={updateCategory}
@@ -85,7 +85,7 @@ export default async function CategoriesPage() {
                       name="color"
                       type="color"
                       defaultValue={c.color}
-                      className="h-[38px] w-full cursor-pointer rounded-lg border border-slate-300"
+                      className="h-[38px] w-full cursor-pointer rounded-lg border border-ink-300 dark:border-ink-600"
                     />
                   </div>
                   <div className="sm:col-span-4">
@@ -93,7 +93,7 @@ export default async function CategoriesPage() {
                       <Save className="h-3.5 w-3.5" />
                       Save changes
                     </button>
-                    <span className="ml-3 text-xs text-slate-400">
+                    <span className="ml-3 text-xs text-ink-400">
                       Budget: {formatMoney(c.monthly_budget, house.currency)} / month
                     </span>
                   </div>

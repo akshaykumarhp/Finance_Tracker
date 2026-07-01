@@ -10,7 +10,7 @@ export default function DeleteButton({
   action,
   id,
   label,
-  className = "rounded-lg p-2 text-ink-300 transition hover:bg-rose-50 hover:text-rose-500 disabled:opacity-50",
+  className = "rounded-lg p-2 text-ink-300 transition hover:bg-rose-50 hover:text-rose-500 disabled:opacity-50 dark:text-ink-600 dark:hover:bg-rose-950 dark:hover:text-rose-400",
   children,
 }: {
   action: (formData: FormData) => Promise<void> | void;

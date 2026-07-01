@@ -5,13 +5,16 @@
 :root {
   color-scheme: light;
 }
+.dark {
+  color-scheme: dark;
+}
 
 html {
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  @apply bg-ink-100 font-sans text-ink-800 antialiased;
+  @apply bg-ink-100 font-sans text-ink-800 antialiased transition-colors duration-200 dark:bg-ink-900 dark:text-ink-100;
   -webkit-tap-highlight-color: transparent;
   /* Soft, professional backdrop: faint indigo glow up top over cool grey. */
   background-color: #f4f6fb;
@@ -19,6 +22,12 @@ body {
     radial-gradient(60rem 40rem at 15% -10%, rgba(99, 102, 241, 0.08), transparent 60%),
     radial-gradient(50rem 40rem at 110% 0%, rgba(139, 92, 246, 0.06), transparent 55%);
   background-attachment: fixed;
+}
+.dark body {
+  background-color: #0b1120;
+  background-image:
+    radial-gradient(60rem 40rem at 15% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+    radial-gradient(50rem 40rem at 110% 0%, rgba(139, 92, 246, 0.09), transparent 55%);
 }
 
 /* iPhone notch / home-indicator safe areas. */
@@ -37,7 +46,7 @@ body {
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-ink-200/70 bg-white p-4 shadow-card sm:p-5;
+    @apply rounded-2xl border border-ink-200/70 bg-white p-4 shadow-card transition-colors duration-200 dark:border-ink-700/70 dark:bg-ink-800 dark:shadow-none sm:p-5;
   }
   .card-interactive {
     @apply card transition duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
@@ -50,10 +59,10 @@ body {
     @apply btn bg-brand-600 text-white shadow-soft shadow-brand-600/20 hover:bg-brand-700;
   }
   .btn-ghost {
-    @apply btn border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50;
+    @apply btn border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50 dark:border-ink-600 dark:bg-ink-800 dark:text-ink-200 dark:hover:border-ink-500 dark:hover:bg-ink-700;
   }
   .btn-danger {
-    @apply btn border border-rose-200 bg-white text-rose-600 hover:bg-rose-50;
+    @apply btn border border-rose-200 bg-white text-rose-600 hover:bg-rose-50 dark:border-rose-900 dark:bg-ink-800 dark:text-rose-400 dark:hover:bg-rose-950;
   }
   .btn-sm {
     @apply rounded-lg px-3 py-1.5 text-xs;
@@ -61,23 +70,23 @@ body {
 
   .input {
     /* 16px on mobile prevents iOS Safari zoom-on-focus. */
-    @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-800 shadow-sm outline-none transition placeholder:text-ink-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 sm:text-sm;
+    @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-800 shadow-sm outline-none transition placeholder:text-ink-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-ink-600 dark:bg-ink-900 dark:text-ink-100 dark:placeholder:text-ink-500 dark:focus:border-brand-400 sm:text-sm;
   }
   .label {
-    @apply mb-1.5 block text-sm font-medium text-ink-600;
+    @apply mb-1.5 block text-sm font-medium text-ink-600 dark:text-ink-400;
   }
 
   .badge {
     @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
   }
   .chip {
-    @apply inline-flex items-center gap-1 rounded-md bg-ink-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-500;
+    @apply inline-flex items-center gap-1 rounded-md bg-ink-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-500 dark:bg-ink-700 dark:text-ink-300;
   }
 
   .page-title {
-    @apply text-xl font-bold tracking-tight text-ink-900 sm:text-2xl;
+    @apply text-xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-2xl;
   }
   .section-title {
-    @apply text-sm font-semibold text-ink-800;
+    @apply text-sm font-semibold text-ink-800 dark:text-ink-100;
   }
 }

@@ -141,13 +141,13 @@ export default async function DashboardPage({
           <div className="mb-2 flex items-end justify-between">
             <span className="section-title">This month&apos;s income usage</span>
             <span className="tnum text-sm text-ink-500">
-              <span className="font-semibold text-ink-800">
+              <span className="font-semibold text-ink-800 dark:text-ink-100">
                 {formatMoney(totalSpent, house.currency)}
               </span>{" "}
               of {formatMoney(totalIncome, house.currency)}
             </span>
           </div>
-          <div className="h-3 w-full overflow-hidden rounded-full bg-ink-100">
+          <div className="h-3 w-full overflow-hidden rounded-full bg-ink-100 dark:bg-ink-700">
             <div
               className={clsx(
                 "h-full rounded-full transition-all",
@@ -185,7 +185,7 @@ export default async function DashboardPage({
             </Link>
           </div>
           {categories.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center">
+            <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center">
               <p className="text-sm text-ink-500">No sections yet.</p>
               <Link href="/categories" className="btn-primary btn-sm mt-3">
                 Create your first section
@@ -220,14 +220,14 @@ export default async function DashboardPage({
           </Link>
         </div>
         {expenses.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center">
+          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center">
             <p className="text-sm text-ink-500">No expenses logged this month yet.</p>
             <Link href="/transactions" className="btn-primary btn-sm mt-3">
               Log an expense
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-ink-100">
+          <div className="divide-y divide-ink-100 dark:divide-ink-700">
             {expenses.slice(0, 6).map((e) => (
               <div key={e.id} className="flex items-center gap-3 py-2.5">
                 <span
@@ -242,14 +242,14 @@ export default async function DashboardPage({
                   </span>
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-ink-800">
+                  <p className="truncate text-sm font-medium text-ink-800 dark:text-ink-100">
                     {e.description || catName(e.category_id)}
                   </p>
                   <p className="text-xs text-ink-400">
                     {catName(e.category_id)} · {formatDate(e.spent_on)}
                   </p>
                 </div>
-                <span className="tnum text-sm font-semibold text-ink-900">
+                <span className="tnum text-sm font-semibold text-ink-900 dark:text-white">
                   {formatMoney(e.amount, house.currency)}
                 </span>
               </div>

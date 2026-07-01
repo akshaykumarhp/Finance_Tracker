@@ -63,7 +63,7 @@ export default async function TransactionsPage({
       <div className="card">
         <h2 className="section-title mb-4">Add expense</h2>
         {categories.length === 0 && (
-          <p className="mb-3 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2.5 text-sm text-amber-700">
+          <p className="mb-3 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2.5 text-sm text-amber-700 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-400">
             Tip: create sections (Rent, Groceries…) first so expenses roll up into
             budgets. You can still log uncategorized expenses below.
           </p>
@@ -78,11 +78,11 @@ export default async function TransactionsPage({
       <div className="card">
         <h2 className="section-title mb-3">This month</h2>
         {expenses.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 px-4 py-8 text-center text-sm text-ink-500">
+          <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center text-sm text-ink-500">
             No expenses recorded this month.
           </div>
         ) : (
-          <div className="divide-y divide-ink-100">
+          <div className="divide-y divide-ink-100 dark:divide-ink-700">
             {expenses.map((e) => (
               <div key={e.id} className="flex items-center gap-3 py-3">
                 <span
@@ -95,7 +95,7 @@ export default async function TransactionsPage({
                   <Receipt className="h-4 w-4" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-ink-800">
+                  <p className="truncate font-medium text-ink-800 dark:text-ink-100">
                     {e.description || catName(e.category_id)}
                   </p>
                   <p className="text-xs text-ink-400">
@@ -103,7 +103,7 @@ export default async function TransactionsPage({
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="tnum font-semibold text-ink-900">
+                  <span className="tnum font-semibold text-ink-900 dark:text-white">
                     {formatMoney(e.amount, house.currency)}
                   </span>
                   <DeleteButton

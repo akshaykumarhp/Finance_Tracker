@@ -33,7 +33,7 @@ function Logo() {
         <Home className="h-5 w-5" />
       </span>
       <div className="leading-tight">
-        <div className="text-sm font-bold text-ink-900">Roost</div>
+        <div className="text-sm font-bold text-ink-900 dark:text-white">Roost</div>
         <div className="text-[11px] text-ink-400">Budget under one roof</div>
       </div>
     </div>
@@ -44,7 +44,7 @@ export function DesktopSidebar() {
   const isActive = useActive();
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col gap-1 border-r border-ink-200/70 bg-white/70 p-3 backdrop-blur md:sticky md:top-0 md:flex md:h-screen">
+    <aside className="hidden w-64 shrink-0 flex-col gap-1 border-r border-ink-200/70 bg-white/70 p-3 backdrop-blur dark:border-ink-700/70 dark:bg-ink-900/70 md:sticky md:top-0 md:flex md:h-screen">
       <div className="mb-4 mt-1">
         <Logo />
       </div>
@@ -59,14 +59,16 @@ export function DesktopSidebar() {
               className={clsx(
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
                 active
-                  ? "bg-brand-50 text-brand-700 shadow-sm shadow-brand-600/5"
-                  : "text-ink-500 hover:bg-ink-50 hover:text-ink-800",
+                  ? "bg-brand-50 text-brand-700 shadow-sm shadow-brand-600/5 dark:bg-brand-500/10 dark:text-brand-300"
+                  : "text-ink-500 hover:bg-ink-50 hover:text-ink-800 dark:hover:bg-ink-800 dark:hover:text-ink-100",
               )}
             >
               <Icon
                 className={clsx(
                   "h-[18px] w-[18px] transition",
-                  active ? "text-brand-600" : "text-ink-400 group-hover:text-ink-600",
+                  active
+                    ? "text-brand-600 dark:text-brand-300"
+                    : "text-ink-400 group-hover:text-ink-600 dark:group-hover:text-ink-200",
                 )}
               />
               {label}
@@ -75,8 +77,8 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      <form action={signOut} className="mt-1 border-t border-ink-100 pt-2">
-        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-400 transition hover:bg-rose-50 hover:text-rose-600">
+      <form action={signOut} className="mt-1 border-t border-ink-100 pt-2 dark:border-ink-700">
+        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950">
           <LogOut className="h-[18px] w-[18px]" />
           Sign out
         </button>
@@ -89,7 +91,7 @@ export function MobileNav() {
   const isActive = useActive();
 
   return (
-    <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 flex border-t border-ink-200/70 bg-white/90 shadow-[0_-4px_20px_-8px_rgba(15,23,42,0.15)] backdrop-blur md:hidden">
+    <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 flex border-t border-ink-200/70 bg-white/90 shadow-[0_-4px_20px_-8px_rgba(15,23,42,0.15)] backdrop-blur dark:border-ink-700/70 dark:bg-ink-900/90 md:hidden">
       {links.map(({ href, short, icon: Icon }) => {
         const active = isActive(href);
         return (
@@ -98,7 +100,7 @@ export function MobileNav() {
             href={href}
             className={clsx(
               "relative flex flex-1 flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition",
-              active ? "text-brand-600" : "text-ink-400",
+              active ? "text-brand-600 dark:text-brand-300" : "text-ink-400",
             )}
           >
             {active && (

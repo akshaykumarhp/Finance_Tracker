@@ -67,7 +67,7 @@ export default function AddCategoryForm({
                   className="peer sr-only"
                 />
                 <span
-                  className="block h-7 w-7 rounded-full ring-offset-2 peer-checked:ring-2 peer-checked:ring-slate-400"
+                  className="block h-7 w-7 rounded-full ring-offset-2 peer-checked:ring-2 peer-checked:ring-ink-400 dark:ring-offset-ink-800"
                   style={{ backgroundColor: c }}
                 />
               </label>

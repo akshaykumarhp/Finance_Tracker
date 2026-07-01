@@ -10,7 +10,7 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-lg font-semibold text-ink-900">Welcome back</h1>
+      <h1 className="mb-1 text-lg font-semibold text-ink-900 dark:text-white">Welcome back</h1>
       <p className="mb-5 text-sm text-ink-400">
         Sign in to your household dashboard.
       </p>
@@ -36,7 +36,7 @@ export default function LoginPage() {
         </div>
 
         {state?.error && (
-          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
+          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600 dark:bg-rose-500/10 dark:text-rose-400">
             {state.error}
           </p>
         )}

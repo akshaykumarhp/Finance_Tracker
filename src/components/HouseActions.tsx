@@ -24,22 +24,22 @@ export default function HouseActions() {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <div className="rounded-xl border border-slate-100 p-4">
-        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
+      <div className="rounded-xl border border-ink-100 p-4 dark:border-ink-700">
+        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink-700 dark:text-ink-200">
           <Plus className="h-4 w-4 text-brand-600" /> Create a new house
         </div>
         <form action={createAction} className="space-y-2">
           <input name="name" className="input" placeholder="House name" required />
           <CurrencySelect />
           {createState?.error && (
-            <p className="text-sm text-red-600">{createState.error}</p>
+            <p className="text-sm text-red-600 dark:text-rose-400">{createState.error}</p>
           )}
           <SubmitButton className="btn-primary w-full">Create</SubmitButton>
         </form>
       </div>
 
-      <div className="rounded-xl border border-slate-100 p-4">
-        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
+      <div className="rounded-xl border border-ink-100 p-4 dark:border-ink-700">
+        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-ink-700 dark:text-ink-200">
           <Users className="h-4 w-4 text-brand-600" /> Join with a code
         </div>
         <form action={joinAction} className="space-y-2">
@@ -50,7 +50,7 @@ export default function HouseActions() {
             required
           />
           {joinState?.error && (
-            <p className="text-sm text-red-600">{joinState.error}</p>
+            <p className="text-sm text-red-600 dark:text-rose-400">{joinState.error}</p>
           )}
           <SubmitButton className="btn-primary w-full">Join</SubmitButton>
         </form>

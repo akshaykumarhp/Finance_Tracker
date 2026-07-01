@@ -23,16 +23,16 @@ export default function BudgetBar({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between text-sm">
-        <span className="flex items-center gap-2 font-medium text-ink-800">
+        <span className="flex items-center gap-2 font-medium text-ink-800 dark:text-ink-100">
           <span
-            className="inline-block h-2.5 w-2.5 rounded-full ring-2 ring-white"
+            className="inline-block h-2.5 w-2.5 rounded-full ring-2 ring-white dark:ring-ink-800"
             style={{ backgroundColor: color, boxShadow: `0 0 0 1px ${color}33` }}
           />
           {name}
           <span className="chip">{kind}</span>
         </span>
         <span className="tnum text-ink-500">
-          <span className="font-semibold text-ink-800">
+          <span className="font-semibold text-ink-800 dark:text-ink-100">
             {formatMoney(spent, currency)}
           </span>
           {budget > 0 && (
@@ -40,7 +40,7 @@ export default function BudgetBar({
           )}
         </span>
       </div>
-      <div className="h-2.5 w-full overflow-hidden rounded-full bg-ink-100">
+      <div className="h-2.5 w-full overflow-hidden rounded-full bg-ink-100 dark:bg-ink-700">
         <div
           className={clsx("h-full rounded-full transition-all", over && "!bg-rose-500")}
           style={{ width: `${pct}%`, backgroundColor: over ? undefined : color }}
