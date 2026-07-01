@@ -5,11 +5,18 @@ import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { ACTIVE_HOUSE_COOKIE } from "@/lib/house";
 
+const MAX_AMOUNT = 1_000_000_000; // 1 billion — generous ceiling, blocks abuse.
+
+// Parse, sanitize, and clamp a monetary amount to [0, MAX_AMOUNT].
 const num = (v: FormDataEntryValue | null) => {
   const n = parseFloat(String(v ?? "").replace(/[^0-9.-]/g, ""));
-  return Number.isFinite(n) ? n : 0;
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.min(n, MAX_AMOUNT);
 };
-const str = (v: FormDataEntryValue | null) => String(v ?? "").trim();
+
+// Trim and cap string length (default 200 chars) to prevent oversized writes.
+const str = (v: FormDataEntryValue | null, max = 200) =>
+  String(v ?? "").trim().slice(0, max);
 
 function refresh() {
   revalidatePath("/dashboard");

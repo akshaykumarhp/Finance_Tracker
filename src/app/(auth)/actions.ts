@@ -3,10 +3,16 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { rateLimit } from "@/lib/ratelimit";
 
 export async function login(_prev: unknown, formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+
+  const { ok } = await rateLimit("login");
+  if (!ok) {
+    return { error: "Too many attempts. Please wait a minute and try again." };
+  }
 
   const supabase = createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -24,6 +30,11 @@ export async function signup(_prev: unknown, formData: FormData) {
 
   if (password.length < 6) {
     return { error: "Password must be at least 6 characters." };
+  }
+
+  const { ok } = await rateLimit("signup");
+  if (!ok) {
+    return { error: "Too many attempts. Please wait a minute and try again." };
   }
 
   const supabase = createClient();

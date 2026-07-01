@@ -1,4 +1,4 @@
-import { Trash2, ArrowUpRight, Receipt } from "lucide-react";
+import { ArrowUpRight, Receipt } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
@@ -6,6 +6,7 @@ import type { Category, Expense } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddExpenseForm from "@/components/AddExpenseForm";
 import StatCard from "@/components/StatCard";
+import DeleteButton from "@/components/DeleteButton";
 import { deleteExpense } from "@/app/(app)/actions";
 
 export default async function TransactionsPage({
@@ -105,15 +106,11 @@ export default async function TransactionsPage({
                   <span className="tnum font-semibold text-ink-900">
                     {formatMoney(e.amount, house.currency)}
                   </span>
-                  <form action={deleteExpense}>
-                    <input type="hidden" name="id" value={e.id} />
-                    <button
-                      className="rounded-lg p-2 text-ink-300 transition hover:bg-rose-50 hover:text-rose-500"
-                      aria-label="Delete expense"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </form>
+                  <DeleteButton
+                    action={deleteExpense}
+                    id={e.id}
+                    label="Delete expense"
+                  />
                 </div>
               </div>
             ))}

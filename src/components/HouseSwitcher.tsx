@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useTransition } from "react";
 import clsx from "clsx";
-import { ChevronDown, Check, Home } from "lucide-react";
+import { ChevronDown, Check, Home, Loader2 } from "lucide-react";
 import type { House } from "@/lib/types";
 import { switchHouse } from "@/app/(app)/actions";
 
@@ -14,6 +14,7 @@ export default function HouseSwitcher({
   activeId: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [pending, start] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   const active = houses.find((h) => h.id === activeId);
 
@@ -32,7 +33,11 @@ export default function HouseSwitcher({
         className="flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-3 py-2 text-sm font-semibold text-ink-700 shadow-sm transition hover:border-ink-300 hover:bg-ink-50"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
-          <Home className="h-3.5 w-3.5" />
+          {pending ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Home className="h-3.5 w-3.5" />
+          )}
         </span>
         <span className="max-w-[10rem] truncate">{active?.name ?? "Select house"}</span>
         <ChevronDown
@@ -55,7 +60,7 @@ export default function HouseSwitcher({
                 key={h.id}
                 onClick={() => {
                   setOpen(false);
-                  switchHouse(h.id);
+                  start(() => switchHouse(h.id));
                 }}
                 className={clsx(
                   "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left text-sm transition",

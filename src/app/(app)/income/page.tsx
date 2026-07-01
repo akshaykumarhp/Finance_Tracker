@@ -1,4 +1,4 @@
-import { Trash2, ArrowDownRight } from "lucide-react";
+import { ArrowDownRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
@@ -6,6 +6,7 @@ import type { Income } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddIncomeForm from "@/components/AddIncomeForm";
 import StatCard from "@/components/StatCard";
+import DeleteButton from "@/components/DeleteButton";
 import { deleteIncome } from "@/app/(app)/actions";
 
 export default async function IncomePage({
@@ -79,15 +80,11 @@ export default async function IncomePage({
                   <span className="tnum font-semibold text-emerald-600">
                     +{formatMoney(i.amount, house.currency)}
                   </span>
-                  <form action={deleteIncome}>
-                    <input type="hidden" name="id" value={i.id} />
-                    <button
-                      className="rounded-lg p-2 text-ink-300 transition hover:bg-rose-50 hover:text-rose-500"
-                      aria-label="Delete income"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </form>
+                  <DeleteButton
+                    action={deleteIncome}
+                    id={i.id}
+                    label="Delete income"
+                  />
                 </div>
               </div>
             ))}

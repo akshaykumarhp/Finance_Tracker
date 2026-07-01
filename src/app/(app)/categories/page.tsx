@@ -1,9 +1,10 @@
-import { Trash2, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import type { Category } from "@/lib/types";
 import { formatMoney, currencySymbol } from "@/lib/format";
 import AddCategoryForm from "@/components/AddCategoryForm";
+import DeleteButton from "@/components/DeleteButton";
 import { updateCategory, deleteCategory } from "@/app/(app)/actions";
 
 export default async function CategoriesPage() {
@@ -98,12 +99,12 @@ export default async function CategoriesPage() {
                   </div>
                 </form>
 
-                <form action={deleteCategory}>
-                  <input type="hidden" name="id" value={c.id} />
-                  <button className="btn-danger" aria-label="Delete section">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </form>
+                <DeleteButton
+                  action={deleteCategory}
+                  id={c.id}
+                  label="Delete section"
+                  className="btn-danger"
+                />
               </div>
             ))}
           </div>

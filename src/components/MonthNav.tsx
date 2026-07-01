@@ -1,24 +1,33 @@
 "use client";
 
+import { useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import clsx from "clsx";
 import { monthLabel, shiftMonth, monthKey } from "@/lib/format";
 
 export default function MonthNav({ month }: { month: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
+  const [pending, start] = useTransition();
 
   const go = (m: string) => {
     const next = new URLSearchParams(params);
     next.set("m", m);
-    router.push(`${pathname}?${next.toString()}`);
+    // scroll:false keeps position; transition keeps the UI interactive.
+    start(() => router.push(`${pathname}?${next.toString()}`, { scroll: false }));
   };
 
   const isCurrent = month === monthKey();
 
   return (
-    <div className="inline-flex items-center gap-1 rounded-xl border border-ink-200 bg-white p-1 shadow-sm">
+    <div
+      className={clsx(
+        "inline-flex items-center gap-1 rounded-xl border border-ink-200 bg-white p-1 shadow-sm transition-opacity",
+        pending && "opacity-60",
+      )}
+    >
       <button
         onClick={() => go(shiftMonth(month, -1))}
         className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-500 transition hover:bg-ink-50 hover:text-ink-800"
