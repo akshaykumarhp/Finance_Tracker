@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import Sidebar from "@/components/Sidebar";
+import { DesktopSidebar, MobileNav } from "@/components/Sidebar";
 import HouseSwitcher from "@/components/HouseSwitcher";
 import Onboarding from "@/components/Onboarding";
+import { signOut } from "@/app/(auth)/actions";
 
 export default async function AppLayout({
   children,
@@ -28,18 +30,30 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <Sidebar />
+      <DesktopSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 md:px-6">
+        <header className="safe-top sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur md:px-6">
           <HouseSwitcher houses={houses} activeId={house.id} />
-          <span className="hidden text-sm text-slate-500 sm:block">
-            Hi, {name}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="hidden text-sm text-slate-500 sm:block">
+              Hi, {name}
+            </span>
+            {/* Sign out lives in the sidebar on desktop; expose it here on mobile. */}
+            <form action={signOut} className="md:hidden">
+              <button
+                className="rounded-lg p-2 text-slate-400 hover:bg-slate-50 hover:text-red-600"
+                aria-label="Sign out"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </form>
+          </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 md:px-6">
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-5 md:px-6 md:pb-8 md:pt-6">
           {children}
         </main>
       </div>
+      <MobileNav />
     </div>
   );
 }

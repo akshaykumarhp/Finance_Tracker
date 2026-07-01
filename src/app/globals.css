@@ -6,17 +6,32 @@
   color-scheme: light;
 }
 
+html {
+  /* Stop iOS Safari from auto-inflating text in landscape. */
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   @apply bg-slate-50 text-slate-800 antialiased;
+  /* Remove the grey tap flash on iOS/Android Chrome. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Respect the iPhone notch / home-indicator safe areas. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
+    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-primary {
@@ -32,7 +47,8 @@ body {
   }
 
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+    /* text-base (16px) on mobile prevents iOS Safari from zooming on focus. */
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base outline-none placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 sm:text-sm;
   }
 
   .label {
