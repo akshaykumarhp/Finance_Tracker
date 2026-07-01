@@ -30,11 +30,11 @@ function Logo() {
   return (
     <div className="flex items-center gap-2.5 px-2 py-1">
       <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
-        <Wallet className="h-5 w-5" />
+        <Home className="h-5 w-5" />
       </span>
       <div className="leading-tight">
-        <div className="text-sm font-bold text-ink-900">House Tracker</div>
-        <div className="text-[11px] text-ink-400">Household finances</div>
+        <div className="text-sm font-bold text-ink-900">Roost</div>
+        <div className="text-[11px] text-ink-400">Budget under one roof</div>
       </div>
     </div>
   );

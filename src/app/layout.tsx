@@ -9,11 +9,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "House Expense Tracker",
+  title: {
+    default: "Roost — Budget under one roof",
+    template: "%s · Roost",
+  },
   description: "Track household income, commitments, and spending together.",
   appleWebApp: {
     capable: true,
-    title: "House Tracker",
+    title: "Roost",
     statusBarStyle: "default",
   },
 };

@@ -1,4 +1,4 @@
-import { Wallet } from "lucide-react";
+import { Home } from "lucide-react";
 
 export default function AuthLayout({
   children,
@@ -14,15 +14,13 @@ export default function AuthLayout({
       <div className="relative w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-3 text-center">
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
-            <Wallet className="h-6 w-6" />
+            <Home className="h-6 w-6" />
           </span>
           <div>
             <div className="text-lg font-bold tracking-tight text-ink-900">
-              House Expense Tracker
+              Roost
             </div>
-            <div className="text-sm text-ink-400">
-              Plan, track, and stay on budget — together.
-            </div>
+            <div className="text-sm text-ink-400">Budget under one roof.</div>
           </div>
         </div>
         <div className="card shadow-card-hover">{children}</div>

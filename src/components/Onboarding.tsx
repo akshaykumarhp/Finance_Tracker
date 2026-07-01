@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { Home, Users, Wallet } from "lucide-react";
+import { Home, Users } from "lucide-react";
 import { createHouse, joinHouse } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
 import CurrencySelect from "@/components/CurrencySelect";
@@ -17,10 +17,10 @@ export default function Onboarding() {
         <div className="mb-8 text-center">
           <div className="mb-3 flex items-center justify-center gap-2.5">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft shadow-brand-600/30">
-              <Wallet className="h-5 w-5" />
+              <Home className="h-5 w-5" />
             </span>
             <span className="text-xl font-bold tracking-tight text-ink-900">
-              House Expense Tracker
+              Roost
             </span>
           </div>
           <p className="text-ink-500">

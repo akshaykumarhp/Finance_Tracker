@@ -1,4 +1,6 @@
-# House Expense Tracker
+# Roost
+
+_Budget under one roof._
 
 A collaborative household finance tracker. Log income, set up spending
 sections (Rent, Loans, Groceries…), record expenses, and watch dashboards show
