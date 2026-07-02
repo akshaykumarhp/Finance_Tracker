@@ -34,7 +34,10 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isAuthRoute = path === "/login" || path === "/signup";
-  const isPublicAsset = path === "/" || path.startsWith("/_next");
+  // /auth/* handles the recovery/confirmation callback and must run even
+  // when there is no session yet (it's what establishes the session).
+  const isPublicAsset =
+    path === "/" || path.startsWith("/_next") || path.startsWith("/auth");
 
   // Not logged in and trying to reach a protected page -> send to login.
   if (!user && !isAuthRoute && !isPublicAsset) {

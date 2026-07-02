@@ -84,8 +84,12 @@ export async function resetPassword() {
   }
 
   const origin = headers().get("origin") ?? "";
+  // The link in the email hits our callback route, which exchanges the
+  // recovery code for a session and forwards to the set-new-password page.
   const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: origin ? `${origin}/login` : undefined,
+    redirectTo: origin
+      ? `${origin}/auth/callback?next=/reset-password`
+      : undefined,
   });
 
   if (error) return { error: error.message };
@@ -93,4 +97,35 @@ export async function resetPassword() {
   return {
     message: `We sent a password reset link to ${user.email}. Check your inbox.`,
   };
+}
+
+// Sets a new password for the current (recovery) session, then signs in.
+export async function updatePassword(_prev: unknown, formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password.length < 6) {
+    return { error: "Password must be at least 6 characters." };
+  }
+  if (password !== confirm) {
+    return { error: "Passwords do not match." };
+  }
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      error:
+        "Your reset link is invalid or has expired. Request a new one from the profile menu.",
+    };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: error.message };
+
+  revalidatePath("/", "layout");
+  redirect("/dashboard");
 }
