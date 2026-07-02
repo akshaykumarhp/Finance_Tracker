@@ -3,6 +3,7 @@
 import { useFormState } from "react-dom";
 import { updatePassword } from "../actions";
 import SubmitButton from "@/components/SubmitButton";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function ResetPasswordPage() {
   const [state, formAction] = useFormState(
@@ -24,13 +25,11 @@ export default function ResetPasswordPage() {
           <label className="label" htmlFor="password">
             New password
           </label>
-          <input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             required
             minLength={6}
-            className="input"
             placeholder="At least 6 characters"
           />
         </div>
@@ -38,13 +37,11 @@ export default function ResetPasswordPage() {
           <label className="label" htmlFor="confirm">
             Confirm password
           </label>
-          <input
+          <PasswordInput
             id="confirm"
             name="confirm"
-            type="password"
             required
             minLength={6}
-            className="input"
             placeholder="Re-enter new password"
           />
         </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useFormState } from "react-dom";
 import { signup } from "../actions";
 import SubmitButton from "@/components/SubmitButton";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function SignupPage() {
   const [state, formAction] = useFormState(
@@ -44,13 +45,11 @@ export default function SignupPage() {
           <label className="label" htmlFor="password">
             Password
           </label>
-          <input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             required
             minLength={6}
-            className="input"
             placeholder="At least 6 characters"
           />
         </div>

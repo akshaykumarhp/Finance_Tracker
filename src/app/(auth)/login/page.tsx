@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useFormState } from "react-dom";
 import { login } from "../actions";
 import SubmitButton from "@/components/SubmitButton";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginPage() {
   const [state, formAction] = useFormState(login, {} as { error?: string });
@@ -26,13 +27,7 @@ export default function LoginPage() {
           <label className="label" htmlFor="password">
             Password
           </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            className="input"
-          />
+          <PasswordInput id="password" name="password" required />
         </div>
 
         {state?.error && (
