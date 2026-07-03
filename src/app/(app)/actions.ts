@@ -199,6 +199,23 @@ export async function addExpense(_prev: unknown, formData: FormData) {
   return { ok: true };
 }
 
+export async function updateExpense(formData: FormData) {
+  const id = str(formData.get("id"));
+  if (!id) return;
+  const categoryId = str(formData.get("category_id"));
+  const supabase = createClient();
+  await supabase
+    .from("expenses")
+    .update({
+      category_id: categoryId || null,
+      amount: num(formData.get("amount")),
+      description: str(formData.get("description")) || null,
+      spent_on: str(formData.get("spent_on")) || new Date().toISOString().slice(0, 10),
+    })
+    .eq("id", id);
+  refresh();
+}
+
 export async function deleteExpense(formData: FormData) {
   const id = str(formData.get("id"));
   if (!id) return;

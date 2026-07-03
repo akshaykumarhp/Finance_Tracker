@@ -1,24 +1,40 @@
-import { ArrowUpRight, Receipt } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
+import { formatMoney, monthKey, monthRange } from "@/lib/format";
 import type { Category, Expense } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddExpenseForm from "@/components/AddExpenseForm";
 import StatCard from "@/components/StatCard";
-import DeleteButton from "@/components/DeleteButton";
-import { deleteExpense } from "@/app/(app)/actions";
+import ExpenseRow from "@/components/ExpenseRow";
+import ExpenseSort, { type ExpenseSortKey } from "@/components/ExpenseSort";
+
+const SORT_CONFIG: Record<
+  ExpenseSortKey,
+  { column: "spent_on" | "amount"; ascending: boolean }
+> = {
+  date_desc: { column: "spent_on", ascending: false },
+  date_asc: { column: "spent_on", ascending: true },
+  amount_desc: { column: "amount", ascending: false },
+  amount_asc: { column: "amount", ascending: true },
+};
 
 export default async function TransactionsPage({
   searchParams,
 }: {
-  searchParams: { m?: string };
+  searchParams: { m?: string; sort?: string };
 }) {
   const { house } = await getActiveHouse();
   if (!house) return null;
 
   const month = searchParams.m ?? monthKey();
   const { start, end } = monthRange(month);
+  const sort: ExpenseSortKey =
+    searchParams.sort && searchParams.sort in SORT_CONFIG
+      ? (searchParams.sort as ExpenseSortKey)
+      : "date_desc";
+  const { column, ascending } = SORT_CONFIG[sort];
+
   const supabase = createClient();
 
   const [{ data: cats }, { data: exps }] = await Promise.all([
@@ -29,16 +45,11 @@ export default async function TransactionsPage({
       .eq("house_id", house.id)
       .gte("spent_on", start)
       .lte("spent_on", end)
-      .order("spent_on", { ascending: false }),
+      .order(column, { ascending }),
   ]);
   const categories = (cats as Category[]) ?? [];
   const expenses = (exps as Expense[]) ?? [];
   const total = expenses.reduce((s, e) => s + Number(e.amount), 0);
-
-  const catName = (id: string | null) =>
-    categories.find((c) => c.id === id)?.name ?? "Uncategorized";
-  const catColor = (id: string | null) =>
-    categories.find((c) => c.id === id)?.color ?? "#94a3b8";
 
   return (
     <div className="space-y-6">
@@ -76,7 +87,10 @@ export default async function TransactionsPage({
       </div>
 
       <div className="card">
-        <h2 className="section-title mb-3">This month</h2>
+        <div className="mb-3 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+          <h2 className="section-title">This month</h2>
+          {expenses.length > 0 && <ExpenseSort sort={sort} />}
+        </div>
         {expenses.length === 0 ? (
           <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center text-sm text-ink-500">
             No expenses recorded this month.
@@ -84,35 +98,12 @@ export default async function TransactionsPage({
         ) : (
           <div className="divide-y divide-ink-100 dark:divide-ink-700">
             {expenses.map((e) => (
-              <div key={e.id} className="flex items-center gap-3 py-3">
-                <span
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                  style={{
-                    backgroundColor: `${catColor(e.category_id)}1a`,
-                    color: catColor(e.category_id),
-                  }}
-                >
-                  <Receipt className="h-4 w-4" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-ink-800 dark:text-ink-100">
-                    {e.description || catName(e.category_id)}
-                  </p>
-                  <p className="text-xs text-ink-400">
-                    {catName(e.category_id)} · {formatDate(e.spent_on)}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="tnum font-semibold text-ink-900 dark:text-white">
-                    {formatMoney(e.amount, house.currency)}
-                  </span>
-                  <DeleteButton
-                    action={deleteExpense}
-                    id={e.id}
-                    label="Delete expense"
-                  />
-                </div>
-              </div>
+              <ExpenseRow
+                key={e.id}
+                expense={e}
+                categories={categories}
+                currency={house.currency}
+              />
             ))}
           </div>
         )}
