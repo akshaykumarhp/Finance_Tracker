@@ -32,7 +32,11 @@ export default async function CategoriesPage() {
 
       <div className="card">
         <h2 className="section-title mb-4">Add a section</h2>
-        <AddCategoryForm houseId={house.id} currency={house.currency} />
+        <AddCategoryForm
+          houseId={house.id}
+          currency={house.currency}
+          existingColors={categories.map((c) => c.color)}
+        />
       </div>
 
       <div className="card">

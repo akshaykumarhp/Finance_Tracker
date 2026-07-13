@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { ACTIVE_HOUSE_COOKIE } from "@/lib/house";
+import { pickCategoryColor } from "@/lib/colors";
 
 const MAX_AMOUNT = 1_000_000_000; // 1 billion — generous ceiling, blocks abuse.
 
@@ -104,12 +105,21 @@ export async function createCategory(_prev: unknown, formData: FormData) {
   if (!house_id || !name) return { error: "Name is required." };
 
   const supabase = createClient();
+
+  // Auto-assign a color that isn't already used by this house's sections,
+  // so users never have to pick one (and never accidentally repeat one).
+  const { data: existing } = await supabase
+    .from("categories")
+    .select("color")
+    .eq("house_id", house_id);
+  const color = pickCategoryColor((existing ?? []).map((c) => c.color));
+
   const { error } = await supabase.from("categories").insert({
     house_id,
     name,
     kind: str(formData.get("kind")) === "commitment" ? "commitment" : "spending",
     monthly_budget: num(formData.get("monthly_budget")),
-    color: str(formData.get("color")) || "#6366f1",
+    color,
   });
   if (error) return { error: error.message };
   refresh();

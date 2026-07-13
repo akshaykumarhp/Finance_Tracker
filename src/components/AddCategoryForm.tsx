@@ -6,21 +6,20 @@ import { Plus } from "lucide-react";
 import { createCategory } from "@/app/(app)/actions";
 import SubmitButton from "@/components/SubmitButton";
 import { currencySymbol } from "@/lib/format";
-
-const COLORS = [
-  "#6366f1", "#ec4899", "#f59e0b", "#10b981",
-  "#3b82f6", "#ef4444", "#8b5cf6", "#14b8a6",
-];
+import { pickCategoryColor } from "@/lib/colors";
 
 export default function AddCategoryForm({
   houseId,
   currency,
+  existingColors,
 }: {
   houseId: string;
   currency: string;
+  existingColors: string[];
 }) {
   const [state, action] = useFormState(createCategory, {} as { error?: string; ok?: boolean });
   const ref = useRef<HTMLFormElement>(null);
+  const nextColor = pickCategoryColor(existingColors);
 
   useEffect(() => {
     if (state?.ok) ref.current?.reset();
@@ -41,7 +40,7 @@ export default function AddCategoryForm({
             <option value="spending">Variable spending</option>
           </select>
         </div>
-        <div>
+        <div className="sm:col-span-2">
           <label className="label">
             Monthly budget / plan ({currencySymbol(currency)})
           </label>
@@ -54,26 +53,14 @@ export default function AddCategoryForm({
             placeholder="0.00"
           />
         </div>
-        <div>
-          <label className="label">Color</label>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {COLORS.map((c, i) => (
-              <label key={c} className="cursor-pointer">
-                <input
-                  type="radio"
-                  name="color"
-                  value={c}
-                  defaultChecked={i === 0}
-                  className="peer sr-only"
-                />
-                <span
-                  className="block h-7 w-7 rounded-full ring-offset-2 peer-checked:ring-2 peer-checked:ring-ink-400 dark:ring-offset-ink-800"
-                  style={{ backgroundColor: c }}
-                />
-              </label>
-            ))}
-          </div>
-        </div>
+      </div>
+
+      <div className="flex items-center gap-2 text-xs text-ink-400">
+        <span
+          className="inline-block h-3 w-3 rounded-full ring-2 ring-white dark:ring-ink-800"
+          style={{ backgroundColor: nextColor, boxShadow: `0 0 0 1px ${nextColor}33` }}
+        />
+        Color is assigned automatically so sections never repeat.
       </div>
 
       {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
