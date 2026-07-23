@@ -44,6 +44,14 @@ body {
   font-feature-settings: "tnum";
 }
 
+/* iOS/Safari centers the value inside <input type="date"> and renders it
+   larger than our other text inputs, so it looks mismatched and oversized
+   next to them. Left-align it to match every other field. No effect on
+   browsers that don't support this WebKit pseudo-element. */
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
 @layer components {
   .card {
     @apply rounded-2xl border border-ink-200/70 bg-white p-4 shadow-card transition-colors duration-200 dark:border-ink-700/70 dark:bg-ink-800 dark:shadow-none sm:p-5;
