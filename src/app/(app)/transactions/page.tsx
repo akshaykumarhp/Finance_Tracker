@@ -8,6 +8,7 @@ import AddExpenseForm from "@/components/AddExpenseForm";
 import StatCard from "@/components/StatCard";
 import ExpenseRow from "@/components/ExpenseRow";
 import ExpenseSort, { type ExpenseSortKey } from "@/components/ExpenseSort";
+import ExpenseFilter from "@/components/ExpenseFilter";
 
 const SORT_CONFIG: Record<
   ExpenseSortKey,
@@ -22,7 +23,7 @@ const SORT_CONFIG: Record<
 export default async function TransactionsPage({
   searchParams,
 }: {
-  searchParams: { m?: string; sort?: string };
+  searchParams: { m?: string; sort?: string; cat?: string };
 }) {
   const { house } = await getActiveHouse();
   if (!house) return null;
@@ -34,18 +35,27 @@ export default async function TransactionsPage({
       ? (searchParams.sort as ExpenseSortKey)
       : "date_desc";
   const { column, ascending } = SORT_CONFIG[sort];
+  const catFilter = searchParams.cat ?? "all";
 
   const supabase = createClient();
 
+  let expenseQuery = supabase
+    .from("expenses")
+    .select("*")
+    .eq("house_id", house.id)
+    .gte("spent_on", start)
+    .lte("spent_on", end)
+    .order(column, { ascending });
+
+  if (catFilter === "uncat") {
+    expenseQuery = expenseQuery.is("category_id", null);
+  } else if (catFilter !== "all") {
+    expenseQuery = expenseQuery.eq("category_id", catFilter);
+  }
+
   const [{ data: cats }, { data: exps }] = await Promise.all([
     supabase.from("categories").select("*").eq("house_id", house.id).order("name"),
-    supabase
-      .from("expenses")
-      .select("*")
-      .eq("house_id", house.id)
-      .gte("spent_on", start)
-      .lte("spent_on", end)
-      .order(column, { ascending }),
+    expenseQuery,
   ]);
   const categories = (cats as Category[]) ?? [];
   const expenses = (exps as Expense[]) ?? [];
@@ -89,11 +99,18 @@ export default async function TransactionsPage({
       <div className="card">
         <div className="mb-3 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <h2 className="section-title">This month</h2>
-          {expenses.length > 0 && <ExpenseSort sort={sort} />}
+          <div className="flex flex-wrap items-center gap-2">
+            {(categories.length > 0 || catFilter !== "all") && (
+              <ExpenseFilter categories={categories} value={catFilter} />
+            )}
+            {expenses.length > 0 && <ExpenseSort sort={sort} />}
+          </div>
         </div>
         {expenses.length === 0 ? (
           <div className="rounded-xl border border-dashed border-ink-200 bg-ink-50/50 dark:border-ink-700 dark:bg-ink-800/40 px-4 py-8 text-center text-sm text-ink-500">
-            No expenses recorded this month.
+            {catFilter === "all"
+              ? "No expenses recorded this month."
+              : "No expenses in this section for the selected month."}
           </div>
         ) : (
           <div className="divide-y divide-ink-100 dark:divide-ink-700">
