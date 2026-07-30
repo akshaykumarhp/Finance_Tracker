@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
-import { monthLabel, shiftMonth, monthKey } from "@/lib/format";
+import { monthLabel, shiftMonth } from "@/lib/format";
 
 export default function MonthNav({ month }: { month: string }) {
   const router = useRouter();
@@ -18,8 +18,6 @@ export default function MonthNav({ month }: { month: string }) {
     // scroll:false keeps position; transition keeps the UI interactive.
     start(() => router.push(`${pathname}?${next.toString()}`, { scroll: false }));
   };
-
-  const isCurrent = month === monthKey();
 
   return (
     <div
@@ -40,9 +38,8 @@ export default function MonthNav({ month }: { month: string }) {
       </span>
       <button
         onClick={() => go(shiftMonth(month, 1))}
-        className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-500 transition hover:bg-ink-50 hover:text-ink-800 disabled:opacity-30 disabled:hover:bg-transparent dark:hover:bg-ink-700 dark:hover:text-ink-100"
+        className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-500 transition hover:bg-ink-50 hover:text-ink-800 dark:hover:bg-ink-700 dark:hover:text-ink-100"
         aria-label="Next month"
-        disabled={isCurrent}
       >
         <ChevronRight className="h-4 w-4" />
       </button>
