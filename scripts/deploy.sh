@@ -20,3 +20,4 @@ fi
 
 vercel alias set "$DEPLOY_URL" roost-hq.vercel.app
 vercel alias set "$DEPLOY_URL" roosthq.vercel.app
+vercel alias set "$DEPLOY_URL" finance-tracker-drab-nine.vercel.app

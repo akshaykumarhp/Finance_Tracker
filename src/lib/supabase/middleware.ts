@@ -28,9 +28,15 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getUser() runs on every request (it's what refreshes the session cookie).
+  // A slow/stuck Supabase response would otherwise hang every page until
+  // Vercel's function timeout kills it — race it so a stall just treats the
+  // user as logged-out instead of freezing the whole site.
+  const result = await Promise.race([
+    supabase.auth.getUser().catch(() => null),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+  ]);
+  const user = result?.data.user ?? null;
 
   const path = request.nextUrl.pathname;
   const isAuthRoute = path === "/login" || path === "/signup";
