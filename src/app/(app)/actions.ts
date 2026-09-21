@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { ACTIVE_HOUSE_COOKIE } from "@/lib/house";
+import { ACTIVE_MONTH_COOKIE } from "@/lib/activeMonth";
 import { pickCategoryColor } from "@/lib/colors";
 
 const MAX_AMOUNT = 1_000_000_000; // 1 billion — generous ceiling, blocks abuse.
@@ -61,6 +62,12 @@ export async function joinHouse(_prev: unknown, formData: FormData) {
 export async function switchHouse(houseId: string) {
   cookies().set(ACTIVE_HOUSE_COOKIE, houseId, { path: "/", maxAge: 60 * 60 * 24 * 365 });
   refresh();
+}
+
+// Remembers the last month picked on any page, so switching pages doesn't
+// reset back to the current month.
+export async function setActiveMonth(month: string) {
+  cookies().set(ACTIVE_MONTH_COOKIE, month, { path: "/", maxAge: 60 * 60 * 24 * 365 });
 }
 
 export async function renameHouse(formData: FormData) {

@@ -1,7 +1,8 @@
 import { ArrowDownRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
+import { formatMoney, formatDate, monthRange } from "@/lib/format";
+import { resolveMonth } from "@/lib/activeMonth";
 import type { Income } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddIncomeForm from "@/components/AddIncomeForm";
@@ -17,7 +18,7 @@ export default async function IncomePage({
   const { house } = await getActiveHouse();
   if (!house) return null;
 
-  const month = searchParams.m ?? monthKey();
+  const month = resolveMonth(searchParams.m);
   const { start, end } = monthRange(month);
   const supabase = createClient();
 

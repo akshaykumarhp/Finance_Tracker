@@ -1,7 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import { formatMoney, monthKey, monthRange } from "@/lib/format";
+import { formatMoney, monthRange } from "@/lib/format";
+import { resolveMonth } from "@/lib/activeMonth";
 import type { Category, Expense } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import AddExpenseForm from "@/components/AddExpenseForm";
@@ -28,7 +29,7 @@ export default async function TransactionsPage({
   const { house } = await getActiveHouse();
   if (!house) return null;
 
-  const month = searchParams.m ?? monthKey();
+  const month = resolveMonth(searchParams.m);
   const { start, end } = monthRange(month);
   const sort: ExpenseSortKey =
     searchParams.sort && searchParams.sort in SORT_CONFIG

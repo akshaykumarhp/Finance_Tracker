@@ -9,7 +9,8 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
-import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
+import { formatMoney, formatDate, monthRange } from "@/lib/format";
+import { resolveMonth } from "@/lib/activeMonth";
 import { effectiveBudget } from "@/lib/budgets";
 import type { Category, CategoryBudget, Expense, Income } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
@@ -25,7 +26,7 @@ export default async function DashboardPage({
   const { house } = await getActiveHouse();
   if (!house) return null;
 
-  const month = searchParams.m ?? monthKey();
+  const month = resolveMonth(searchParams.m);
   const { start, end } = monthRange(month);
   const supabase = createClient();
 

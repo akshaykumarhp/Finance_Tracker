@@ -2,7 +2,8 @@ import { Save } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import type { Category, CategoryBudget } from "@/lib/types";
-import { formatMoney, currencySymbol, monthKey, monthLabel } from "@/lib/format";
+import { formatMoney, currencySymbol, monthLabel } from "@/lib/format";
+import { resolveMonth } from "@/lib/activeMonth";
 import { effectiveBudget } from "@/lib/budgets";
 import AddCategoryForm from "@/components/AddCategoryForm";
 import DeleteButton from "@/components/DeleteButton";
@@ -17,7 +18,7 @@ export default async function CategoriesPage({
   const { house } = await getActiveHouse();
   if (!house) return null;
 
-  const month = searchParams.m ?? monthKey();
+  const month = resolveMonth(searchParams.m);
   const supabase = createClient();
 
   const [{ data: cats }, { data: budgetRows }] = await Promise.all([

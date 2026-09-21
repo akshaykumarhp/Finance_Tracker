@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import { monthLabel, shiftMonth } from "@/lib/format";
+import { setActiveMonth } from "@/app/(app)/actions";
 
 export default function MonthNav({ month }: { month: string }) {
   const router = useRouter();
@@ -15,8 +16,12 @@ export default function MonthNav({ month }: { month: string }) {
   const go = (m: string) => {
     const next = new URLSearchParams(params);
     next.set("m", m);
-    // scroll:false keeps position; transition keeps the UI interactive.
-    start(() => router.push(`${pathname}?${next.toString()}`, { scroll: false }));
+    // Remember the month site-wide, then navigate. scroll:false keeps
+    // position; transition keeps the UI interactive.
+    start(async () => {
+      await setActiveMonth(m);
+      router.push(`${pathname}?${next.toString()}`, { scroll: false });
+    });
   };
 
   return (
