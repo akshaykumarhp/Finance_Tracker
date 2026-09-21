@@ -52,6 +52,19 @@ create table if not exists public.categories (
   created_at     timestamptz not null default now()
 );
 
+-- Per-month override of a category's budget (e.g. a higher Groceries budget
+-- in December). Falls back to categories.monthly_budget when no row exists
+-- for a given month.
+create table if not exists public.category_budgets (
+  id          uuid primary key default gen_random_uuid(),
+  house_id    uuid not null references public.houses (id) on delete cascade,
+  category_id uuid not null references public.categories (id) on delete cascade,
+  month       text not null, -- 'YYYY-MM'
+  amount      numeric(12, 2) not null default 0,
+  created_at  timestamptz not null default now(),
+  unique (category_id, month)
+);
+
 -- Income entries (salary, bonus, etc.).
 create table if not exists public.incomes (
   id          uuid primary key default gen_random_uuid(),
@@ -77,6 +90,7 @@ create table if not exists public.expenses (
 );
 
 create index if not exists idx_categories_house on public.categories (house_id);
+create index if not exists idx_category_budgets_house on public.category_budgets (house_id, month);
 create index if not exists idx_incomes_house    on public.incomes (house_id, received_on);
 create index if not exists idx_expenses_house   on public.expenses (house_id, spent_on);
 create index if not exists idx_expenses_cat     on public.expenses (category_id);
@@ -213,9 +227,10 @@ create trigger on_auth_user_created
 alter table public.profiles      enable row level security;
 alter table public.houses        enable row level security;
 alter table public.house_members enable row level security;
-alter table public.categories    enable row level security;
-alter table public.incomes       enable row level security;
-alter table public.expenses      enable row level security;
+alter table public.categories        enable row level security;
+alter table public.category_budgets  enable row level security;
+alter table public.incomes           enable row level security;
+alter table public.expenses          enable row level security;
 
 -- profiles ------------------------------------------------------------------
 drop policy if exists profiles_select on public.profiles;
@@ -248,6 +263,11 @@ create policy members_delete_self on public.house_members
 -- categories ----------------------------------------------------------------
 drop policy if exists categories_all on public.categories;
 create policy categories_all on public.categories
+  for all using (public.is_house_member(house_id)) with check (public.is_house_member(house_id));
+
+-- category_budgets -----------------------------------------------------------
+drop policy if exists category_budgets_all on public.category_budgets;
+create policy category_budgets_all on public.category_budgets
   for all using (public.is_house_member(house_id)) with check (public.is_house_member(house_id));
 
 -- incomes -------------------------------------------------------------------

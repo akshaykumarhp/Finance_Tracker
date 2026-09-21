@@ -32,6 +32,15 @@ export interface Category {
   created_at: string;
 }
 
+export interface CategoryBudget {
+  id: string;
+  house_id: string;
+  category_id: string;
+  month: string; // YYYY-MM
+  amount: number;
+  created_at: string;
+}
+
 export interface Income {
   id: string;
   house_id: string;

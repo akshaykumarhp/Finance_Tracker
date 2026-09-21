@@ -128,17 +128,27 @@ export async function createCategory(_prev: unknown, formData: FormData) {
 
 export async function updateCategory(formData: FormData) {
   const id = str(formData.get("id"));
-  if (!id) return;
+  const house_id = str(formData.get("house_id"));
+  const month = str(formData.get("month"));
+  if (!id || !house_id || !month) return;
+
   const supabase = createClient();
   await supabase
     .from("categories")
     .update({
       name: str(formData.get("name")),
       kind: str(formData.get("kind")) === "commitment" ? "commitment" : "spending",
-      monthly_budget: num(formData.get("monthly_budget")),
       color: str(formData.get("color")) || "#6366f1",
     })
     .eq("id", id);
+
+  // Budget is set per month, not on the category itself — this only
+  // overrides the viewed month, leaving other months (and the category's
+  // recurring default) untouched.
+  await supabase.from("category_budgets").upsert(
+    { house_id, category_id: id, month, amount: num(formData.get("monthly_budget")) },
+    { onConflict: "category_id,month" },
+  );
   refresh();
 }
 

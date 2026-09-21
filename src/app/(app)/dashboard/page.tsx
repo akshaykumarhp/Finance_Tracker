@@ -10,7 +10,8 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { getActiveHouse } from "@/lib/house";
 import { formatMoney, formatDate, monthKey, monthRange } from "@/lib/format";
-import type { Category, Expense, Income } from "@/lib/types";
+import { effectiveBudget } from "@/lib/budgets";
+import type { Category, CategoryBudget, Expense, Income } from "@/lib/types";
 import MonthNav from "@/components/MonthNav";
 import StatCard from "@/components/StatCard";
 import SpendingDonut from "@/components/SpendingDonut";
@@ -28,31 +29,41 @@ export default async function DashboardPage({
   const { start, end } = monthRange(month);
   const supabase = createClient();
 
-  const [{ data: cats }, { data: incs }, { data: exps }] = await Promise.all([
-    supabase.from("categories").select("*").eq("house_id", house.id).order("name"),
-    supabase
-      .from("incomes")
-      .select("*")
-      .eq("house_id", house.id)
-      .gte("received_on", start)
-      .lte("received_on", end),
-    supabase
-      .from("expenses")
-      .select("*")
-      .eq("house_id", house.id)
-      .gte("spent_on", start)
-      .lte("spent_on", end)
-      .order("spent_on", { ascending: false }),
-  ]);
+  const [{ data: cats }, { data: budgetRows }, { data: incs }, { data: exps }] =
+    await Promise.all([
+      supabase.from("categories").select("*").eq("house_id", house.id).order("name"),
+      supabase
+        .from("category_budgets")
+        .select("*")
+        .eq("house_id", house.id)
+        .eq("month", month),
+      supabase
+        .from("incomes")
+        .select("*")
+        .eq("house_id", house.id)
+        .gte("received_on", start)
+        .lte("received_on", end),
+      supabase
+        .from("expenses")
+        .select("*")
+        .eq("house_id", house.id)
+        .gte("spent_on", start)
+        .lte("spent_on", end)
+        .order("spent_on", { ascending: false }),
+    ]);
 
   const categories = (cats as Category[]) ?? [];
+  const budgets = (budgetRows as CategoryBudget[]) ?? [];
   const incomes = (incs as Income[]) ?? [];
   const expenses = (exps as Expense[]) ?? [];
 
   const totalIncome = incomes.reduce((s, i) => s + Number(i.amount), 0);
   const totalSpent = expenses.reduce((s, e) => s + Number(e.amount), 0);
   const remaining = totalIncome - totalSpent;
-  const totalPlanned = categories.reduce((s, c) => s + Number(c.monthly_budget), 0);
+  const totalPlanned = categories.reduce(
+    (s, c) => s + effectiveBudget(c, budgets, month),
+    0,
+  );
 
   // Spend per category.
   const spentByCat = new Map<string, number>();
@@ -200,7 +211,7 @@ export default async function DashboardPage({
                   color={c.color}
                   kind={c.kind}
                   spent={spentByCat.get(c.id) ?? 0}
-                  budget={Number(c.monthly_budget)}
+                  budget={effectiveBudget(c, budgets, month)}
                   currency={house.currency}
                 />
               ))}
